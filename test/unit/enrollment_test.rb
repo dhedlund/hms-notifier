@@ -39,4 +39,11 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert_not_nil @enrollment.updated_at
   end
 
+  #----------------------------------------------------------------------------#
+  # relationship w/ MessageStream:
+  #-------------------------------
+  test "can access message stream from enrollment" do
+    assert Factory.build(:enrollment).message_stream
+  end
+
 end

@@ -32,4 +32,18 @@ class MessageStreamTest < ActiveSupport::TestCase
       :message_stream => stream).invalid?
   end
 
+  #----------------------------------------------------------------------------#
+  # relationship w/ Enrollment:
+  #----------------------------
+  test "can access enrollments from message stream" do
+    assert Factory.create(:message_stream).enrollments
+  end
+
+  test "can associate multiple enrollments with a message stream" do
+    stream = Factory.build(:message_stream)
+    stream.enrollments << Factory.build(:enrollment)
+    stream.enrollments << Factory.build(:enrollment)
+    assert_equal 2, stream.enrollments.size
+  end
+
 end

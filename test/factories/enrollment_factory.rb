@@ -4,4 +4,6 @@ Factory.define :enrollment do |f|
   f.phone_number '+01234-5678-9'
   f.delivery_method 'SMS'
   f.stream_start Time.now
+
+  f.association :message_stream
 end
