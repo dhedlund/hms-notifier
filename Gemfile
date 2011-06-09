@@ -2,10 +2,20 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.0.7'
 
+gem 'mysql'
+gem 'sqlite3'
+gem 'haml'
+
+group :development, :test do
+  gem 'rails3-generators'
+  gem 'haml-rails'
+  gem 'factory_girl_rails'
+  gem 'jsonschema'
+  gem 'mocha'
+end
+
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
-
-gem 'sqlite3'
 
 # Use unicorn as the web server
 # gem 'unicorn'
