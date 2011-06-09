@@ -4,4 +4,8 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-HmsNotifier::Application.config.secret_token = '5d6a673c4c81b5d18e143083cd63f76aa7393ee62030c751e3084efe9882930136f8cb24f5479a5851b978ca0b50aaf0f1b0ce736159a6204e1a1a3bb0826ea8'
+token_file = Rails.root.join('config', 'priv', 'secret_token')
+unless token_file.exist?
+  token_file.open('w') {|f| f.write ActiveSupport::SecureRandom.hex(64) }
+end
+HmsNotifier::Application.config.secret_token = token_file.read
