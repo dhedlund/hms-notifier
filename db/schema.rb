@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110610105008) do
+ActiveRecord::Schema.define(:version => 20110610091100) do
 
   create_table "enrollments", :force => true do |t|
     t.string   "first_name"
@@ -18,13 +18,13 @@ ActiveRecord::Schema.define(:version => 20110610105008) do
     t.integer  "phone_number"
     t.integer  "message_stream_id"
     t.string   "delivery_method"
-    t.datetime "stream_start"
+    t.string   "preferred_time"
+    t.date     "stream_start"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "preferred_time"
   end
 
-  add_index "enrollments", ["message_stream_id", "stream_start"], :name => "index_enrollments_on_message_stream_id_and_stream_start"
+  add_index "enrollments", ["message_stream_id"], :name => "index_enrollments_on_message_stream_id"
   add_index "enrollments", ["phone_number", "message_stream_id"], :name => "index_enrollments_on_phone_number_and_message_stream_id", :unique => true
 
   create_table "message_streams", :force => true do |t|
