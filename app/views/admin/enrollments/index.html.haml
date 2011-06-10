@@ -1,0 +1,15 @@
+%h1 Enrollments
+%table
+  %tr
+    %th ID
+    %th Stream
+    %th Phone Number
+    %th Delivery Method
+    %th Stream Start
+  - @enrollments.each do |enrollment|
+    %tr
+      %td= link_to enrollment.id, [:admin, enrollment]
+      %td= enrollment.message_stream_id
+      %td= enrollment.phone_number
+      %td= enrollment.delivery_method
+      %td= enrollment.stream_start.strftime '%Y-%m-%d'

@@ -1,0 +1,29 @@
+%h1 View Enrollment
+%table
+  %tr
+    %th ID
+    %td= @enrollment.id
+  %tr
+    %th Message Stream ID
+    %td= @enrollment.message_stream_id
+  %tr
+    %th First Name
+    %td= @enrollment.first_name
+  %tr
+    %th Last Name
+    %td= @enrollment.last_name
+  %tr
+    %th Phone Number
+    %td= @enrollment.phone_number
+  %tr
+    %th Delivery Method
+    %td= @enrollment.delivery_method
+  %tr
+    %th Stream Start
+    %td= @enrollment.stream_start
+  %tr
+    %th Date Created
+    %td= @enrollment.created_at.strftime '%b %e, %Y @ %r %Z'
+  %tr
+    %th Last Updated
+    %td= @enrollment.updated_at.strftime '%b %e, %Y @ %r %Z'
