@@ -84,4 +84,14 @@ class NotificationTest < ActiveSupport::TestCase
     assert Factory.build(:notification, :enrollment => enrollment, :message => message).invalid?
   end
 
+  #----------------------------------------------------------------------------#
+  # relationship w/ NotificationUpdate:
+  #------------------------------------
+  test "can associate multiple updates with a notification" do
+    notification = Factory.build(:notification)
+    assert_difference('notification.updates.size', 2) do
+      2.times { notification.updates << Factory.build(:notification_update) }
+    end
+  end
+
 end

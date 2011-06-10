@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110609214143) do
+ActiveRecord::Schema.define(:version => 20110610060213) do
 
   create_table "enrollments", :force => true do |t|
     t.string   "first_name"
@@ -45,6 +45,25 @@ ActiveRecord::Schema.define(:version => 20110609214143) do
   end
 
   add_index "messages", ["message_stream_id", "name"], :name => "index_messages_on_message_stream_id_and_name", :unique => true
+
+  create_table "notification_updates", :force => true do |t|
+    t.integer  "notification_id"
+    t.string   "action"
+    t.string   "first_name"
+    t.string   "phone_number"
+    t.string   "delivery_method"
+    t.string   "message_path"
+    t.date     "delivery_date"
+    t.date     "delivery_expires"
+    t.string   "preferred_time"
+    t.datetime "uploaded_at"
+    t.integer  "response_code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "notification_updates", ["notification_id"], :name => "index_notification_updates_on_notification_id"
+  add_index "notification_updates", ["uploaded_at"], :name => "index_notification_updates_on_uploaded_at"
 
   create_table "notifications", :force => true do |t|
     t.string   "uuid"
