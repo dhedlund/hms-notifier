@@ -1,0 +1,44 @@
+%h1 View Notification Update
+%table
+  %tr
+    %th ID
+    %td= @notification_update.id
+  %tr
+    %th Notification ID
+    %td= link_to @notification.id, [:admin, @notification]
+  %tr
+    %th Action
+    %td= @notification_update.action
+  %tr
+    %th First Name
+    %td= @notification_update.first_name
+  %tr
+    %th Phone Number
+    %td= @notification_update.phone_number
+  %tr
+    %th Message Path
+    %td= @notification_update.message_path
+  %tr
+    %th Delivery Method
+    %td= @notification_update.delivery_method
+  %tr
+    %th Delivery Date
+    %td= @notification_update.delivery_date.strftime '%Y-%m-%d'
+  %tr
+    %th Preferred Time
+    %td= @notification_update.preferred_time
+  %tr
+    %th Delivery Expires
+    %td= @notification_update.delivery_expires.try(:strftime, '%Y-%m-%d')
+  %tr
+    %th Response Code
+    %td= @notification_update.response_code
+  %tr
+    %th Uploaded At
+    %td= @notification_update.uploaded_at.try(:strftime, '%b %e, %Y @ %r %Z')
+  %tr
+    %th Date Created
+    %td= @notification_update.created_at.strftime '%b %e, %Y @ %r %Z'
+  %tr
+    %th Last Updated
+    %td= @notification_update.updated_at.strftime '%b %e, %Y @ %r %Z'

@@ -1,9 +1,14 @@
 HmsNotifier::Application.routes.draw do
   namespace :admin do
     get '/' => :index
-    resources :enrollments, :notifications, :users
-    resources :message_streams, :path => :streams do
+    resources :enrollments, :users, :only => [:index, :show]
+
+    resources :message_streams, :path => :streams, :only => [:index, :show] do
       resources :messages, :only => [:index, :show]
+    end
+
+    resources :notifications, :only => [:index, :show] do
+      resources :notification_updates, :path => :updates, :only => [:index, :show]
     end
   end
 
