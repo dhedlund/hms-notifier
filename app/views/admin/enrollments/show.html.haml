@@ -5,7 +5,7 @@
     %td= @enrollment.id
   %tr
     %th Message Stream ID
-    %td= @enrollment.message_stream_id
+    %td= link_to @enrollment.message_stream_id, admin_message_stream_path(@enrollment.message_stream_id)
   %tr
     %th First Name
     %td= @enrollment.first_name
