@@ -1,0 +1,58 @@
+%h1 View Notification
+%table
+  %tr
+    %th ID
+    %td= @notification.id
+  %tr
+    %th UUID
+    %td= @notification.uuid
+  %tr
+    %th Enrollment ID
+    %td= link_to @notification.enrollment_id, admin_enrollment_path(@notification.enrollment_id)
+  %tr
+    %th Message ID
+    %td= @notification.message_id
+  %tr
+    %th Delivery Date
+    %td= @notification.delivery_date.strftime '%b %e, %Y @ %r %Z'
+  %tr
+    %th Preferred Time
+    %td= @notification.preferred_time
+  %tr
+    %th Status
+    %td= @notification.status
+  %tr
+    %th Delivered At
+    %td= @notification.delivered_at.try(:strftime, '%b %e, %Y @ %r %Z')
+  %tr
+    %th Date Created
+    %td= @notification.created_at.strftime '%b %e, %Y @ %r %Z'
+  %tr
+    %th Last Updated
+    %td= @notification.updated_at.strftime '%b %e, %Y @ %r %Z'
+
+%h2 Updates/History
+%table
+  %tr
+    %th Date
+    %th Action
+    %th Uploaded
+    %th Response
+  - @notification_updates.each do |update|
+    %tr
+      %td= update.created_at.strftime '%Y-%m-%d'
+      %td= update.action
+      %td= update.uploaded_at.present? ? 'Y' : ''
+      %td= update.response_code
+
+%h2 Responses
+%table
+  %tr
+    %th Date
+    %th Status
+    %th Error
+  - @notification_responses.each do |response|
+    %tr
+      %td= response.created_at.strftime '%Y-%m-%d'
+      %td= response.status
+      %td= response.error_type
