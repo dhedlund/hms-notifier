@@ -66,6 +66,26 @@ class MessagesTest < ActiveSupport::TestCase
     assert Factory.build(:message).message_stream
   end
 
+  #----------------------------------------------------------------------------#
+  # scopes:
+  #--------
+  test "notifiable: messages with offsets between -1 and 5 days from offset" do
+    stream = Factory.create(:message_stream)
+    (3..12).each do |d|
+      Factory.create(:message, :message_stream => stream, :offset_days => d)
+    end
+
+    assert_equal 3, stream.messages.notifiable(0).count, "count failed for 5"
+    assert_equal 7, stream.messages.notifiable(5).count, "count failed for 5"
+    assert_equal 1, stream.messages.notifiable(13).count, "count failed for 13"
+
+    [0,5,13].each do |offset|
+      results = stream.messages.notifiable(offset).map(&:offset_days)
+      assert(results.all? { |d| d >= offset - 1 && d <= offset + 5 },
+        "failed for offset #{offset}, got: #{results.to_sentence}")
+    end
+  end
+
 end
 
 
