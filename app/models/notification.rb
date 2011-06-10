@@ -4,6 +4,7 @@ class Notification < ActiveRecord::Base
   belongs_to :enrollment
   belongs_to :message
   has_many :updates, :class_name => 'NotificationUpdate'
+  has_many :responses, :class_name => 'NotificationResponse'
 
   before_save :generate_uuid, :unless => :uuid?
 

@@ -94,4 +94,14 @@ class NotificationTest < ActiveSupport::TestCase
     end
   end
 
+  #----------------------------------------------------------------------------#
+  # relationship w/ NotificationResponse:
+  #--------------------------------------
+  test "can associate multiple responses with a notification" do
+    notification = Factory.build(:notification)
+    assert_difference('notification.responses.size', 2) do
+      2.times { notification.responses << Factory.build(:notification_response) }
+    end
+  end
+
 end
