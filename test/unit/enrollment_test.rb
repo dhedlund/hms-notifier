@@ -29,6 +29,10 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert Factory.build(:enrollment, :stream_start => nil).invalid?
   end
 
+  test "should be valid without a preferred time" do
+    assert Factory.build(:enrollment, :preferred_time => nil).valid?
+  end
+
   test "should be able to retrieve the created_at date" do
     @enrollment.save!
     assert_not_nil @enrollment.created_at
