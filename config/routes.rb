@@ -2,6 +2,7 @@ HmsNotifier::Application.routes.draw do
   namespace :admin do
     get '/' => :index
     resources :enrollments, :users
+    resources :message_streams, :path => :streams
   end
 
   # The priority is based upon order of creation:
