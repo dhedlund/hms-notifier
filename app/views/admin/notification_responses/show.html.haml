@@ -1,0 +1,26 @@
+%h1 View Notification Response
+%table
+  %tr
+    %th ID
+    %td= @notification_response.id
+  %tr
+    %th Notification ID
+    %td= link_to @notification.id, [:admin, @notification]
+  %tr
+    %th Status
+    %td= @notification_response.status
+  %tr
+    %th Delivered At
+    %td= @notification_response.delivered_at.try(:strftime, '%Y-%m-%d')
+  %tr
+    %th Error Type
+    %td= @notification_response.error_type
+  %tr
+    %th Error Message
+    %td= @notification_response.error_msg
+  %tr
+    %th Date Created
+    %td= @notification_response.created_at.strftime '%b %e, %Y @ %r %Z'
+  %tr
+    %th Last Updated
+    %td= @notification_response.updated_at.strftime '%b %e, %Y @ %r %Z'

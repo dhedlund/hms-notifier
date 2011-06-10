@@ -9,6 +9,7 @@ HmsNotifier::Application.routes.draw do
 
     resources :notifications, :only => [:index, :show] do
       resources :notification_updates, :path => :updates, :only => [:index, :show]
+      resources :notification_responses, :path => :responses, :only => [:index, :show]
     end
   end
 
