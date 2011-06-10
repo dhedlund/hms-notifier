@@ -46,4 +46,14 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert Factory.build(:enrollment).message_stream
   end
 
+  #----------------------------------------------------------------------------#
+  # relationship w/ Notification:
+  #------------------------------
+  test "can associate multiple notifications with an enrollment" do
+    enrollment = Factory.build(:enrollment)
+    assert_difference('enrollment.notifications.size', 2) do
+      2.times { enrollment.notifications << Factory.build(:notification) }
+    end
+  end
+
 end
