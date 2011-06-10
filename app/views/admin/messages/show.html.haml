@@ -1,0 +1,26 @@
+%h1 View Message
+%table
+  %tr
+    %th ID
+    %td= @message.id
+  %tr
+    %th Message Stream ID
+    %td= link_to @message.message_stream_id, [:admin, @message_stream]
+  %tr
+    %th Name
+    %td= @message.name
+  %tr
+    %th Title
+    %td= @message.title
+  %tr
+    %th Path
+    %td= @message.path
+  %tr
+    %th Offset Days
+    %td= @message.offset_days
+  %tr
+    %th Date Created
+    %td= @message.created_at.strftime '%b %e, %Y @ %r %Z'
+  %tr
+    %th Last Updated
+    %td= @message.updated_at.strftime '%b %e, %Y @ %r %Z'
