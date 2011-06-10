@@ -10,5 +10,13 @@ class ActiveSupport::TestCase
   # -- they do not yet inherit this setting
   fixtures :all
 
+  def encode_credentials(username, password)
+    "Basic #{ActiveSupport::Base64.encode64("#{username}:#{password}")}"
+  end
+
+  def json_response
+    ActiveSupport::JSON.decode @response.body
+  end
+
   # Add more helper methods to be used by all tests here...
 end
