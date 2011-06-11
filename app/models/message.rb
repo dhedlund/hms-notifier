@@ -7,6 +7,7 @@ class Message < ActiveRecord::Base
   validates :title, :presence => true
   validates :offset_days, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
 
+  default_scope order('offset_days')
   scope :notifiable, lambda { |offset| where('offset_days BETWEEN ? AND ?', offset - 1, offset + 5) }
 
   def self.find_by_path(path)

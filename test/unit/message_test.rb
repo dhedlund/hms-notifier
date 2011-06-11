@@ -17,6 +17,14 @@ class MessagesTest < ActiveSupport::TestCase
     assert Factory.build(:message, :title => nil).invalid?
   end
 
+  test "should be sorted by offset_days in ascending order" do
+    s = Factory.create(:message_stream)
+    [10,6,29,8,3].each do |offset|
+      Factory.create(:message, :message_stream => s, :offset_days => offset)
+    end
+    assert_equal s.messages.map(&:offset_days).sort, s.messages.map(&:offset_days)
+  end
+
   #----------------------------------------------------------------------------#
   # offset_days:
   #-------------
