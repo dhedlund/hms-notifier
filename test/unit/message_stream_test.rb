@@ -32,6 +32,14 @@ class MessageStreamTest < ActiveSupport::TestCase
       :message_stream => stream).invalid?
   end
 
+  test "should be sorted by name in ascending order" do
+    ['w','b','e','x','n'].each do |name|
+      Factory.create(:message_stream, :name => name)
+    end
+    assert_equal MessageStream.all.map(&:name).sort, MessageStream.all.map(&:name)
+  end
+
+
   #----------------------------------------------------------------------------#
   # relationship w/ Enrollment:
   #----------------------------
