@@ -9,12 +9,10 @@ class NotificationTest < ActiveSupport::TestCase
     assert Factory.build(:notification).valid?
   end
 
-  test "should be invalid without a delivery_date" do
-    assert Factory.build(:notification, :delivery_date => nil).invalid?
-  end
-
   test "preferred_time is optional" do
-    assert Factory.build(:notification, :preferred_time => nil).valid?
+    notification = Factory.build(:notification)
+    notification.preferred_time = nil
+    assert notification.valid?
   end
 
   test "delivered_at is optional" do
@@ -55,6 +53,22 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # delivery_date:
+  #---------------
+  test "should be invalid without a delivery_date" do
+    notification = Factory.build(:notification)
+    notification.delivery_date = nil
+    notification.invalid?
+  end
+
+  test "should calculate delivery date if message and enrollment" do
+    e = Factory.create(:enrollment, :stream_start => Date.parse('2011-03-24'))
+    m = Factory.create(:message, :offset_days => 6)
+    notification = Notification.new(:enrollment => e, :message => m)
+    assert_equal Date.parse('2011-03-30'), notification.delivery_date
+  end
+
+  #----------------------------------------------------------------------------#
   # relationship w/ Enrollment:
   #----------------------------
   test "should be invalid without an enrollment_id" do
@@ -63,6 +77,12 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "can access enrollment from notification" do
     assert Factory.build(:notification).enrollment
+  end
+
+  test "should copy preferred time from enrollment" do
+    enrollment = Factory.create(:enrollment)
+    notification = Notification.new(:enrollment => enrollment)
+    assert_equal enrollment.preferred_time, notification.preferred_time
   end
 
   #----------------------------------------------------------------------------#

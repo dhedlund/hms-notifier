@@ -131,7 +131,8 @@ class NotificationUpdateTest < ActiveSupport::TestCase
   end
 
   test "assigning a notification should set preferred_time" do
-    notification = Factory.create(:notification, :preferred_time => '10-19')
+    enrollment = Factory.create(:enrollment, :preferred_time => '10-19')
+    notification = Factory.create(:notification, :enrollment => enrollment)
     update = Factory.build(:notification_update, :notification => nil)
     update.notification = notification
     assert_not_nil update.preferred_time
