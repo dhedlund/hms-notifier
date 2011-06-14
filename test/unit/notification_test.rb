@@ -13,8 +13,41 @@ class NotificationTest < ActiveSupport::TestCase
     assert Factory.build(:notification, :delivered_at => nil).valid?
   end
 
-  test "status is optional" do
-    assert Factory.build(:notification, :status => nil).valid?
+  #----------------------------------------------------------------------------#
+  # status:
+  #--------
+  test "status should default to 'NEW'" do
+    assert_equal Notification::NEW, Factory.build(:notification).status
+  end
+
+  test "should be invalid without a status" do
+    notification = Factory.build(:notification)
+    notification.status = nil
+    assert notification.invalid?
+  end
+
+  test "should be invalid with an unknown status" do
+    assert Factory.build(:notification, :status => 'BEWILDERED').invalid?
+  end
+
+  test "NEW is a valid status" do
+    assert Factory.build(:notification, :status => Notification::NEW).valid?
+  end
+
+  test "TEMP_FAIL is a valid status" do
+    assert Factory.build(:notification, :status => Notification::TEMP_FAIL).valid?
+  end
+
+  test "PERM_FAIL is a valid status" do
+    assert Factory.build(:notification, :status => Notification::PERM_FAIL).valid?
+  end
+
+  test "DELIVERED is a valid status" do
+    assert Factory.build(:notification, :status => Notification::DELIVERED).valid?
+  end
+
+  test "CANCELLED is a valid status" do
+    assert Factory.build(:notification, :status => Notification::CANCELLED).valid?
   end
 
   #----------------------------------------------------------------------------#
@@ -60,6 +93,29 @@ class NotificationTest < ActiveSupport::TestCase
     m = Factory.create(:message, :offset_days => 6)
     notification = Notification.new(:enrollment => e, :message => m)
     assert_equal Date.parse('2011-03-30'), notification.delivery_date
+  end
+
+  #----------------------------------------------------------------------------#
+  # active?:
+  #---------
+  test "notification is active if it has a status of NEW" do
+    assert Factory.build(:notification, :status => Notification::NEW).active?
+  end
+
+  test "notification is active if it has a status of TEMP_FAIL" do
+    assert Factory.build(:notification, :status => Notification::TEMP_FAIL).active?
+  end
+
+  test "notification is not active if it has a status of PERM_FAIL" do
+    assert !Factory.build(:notification, :status => Notification::PERM_FAIL).active?
+  end
+
+  test "notification is not active if it has a status of DELIVERED" do
+    assert !Factory.build(:notification, :status => Notification::DELIVERED).active?
+  end
+
+  test "notification is not active if it has a status of CANCELLED" do
+    assert !Factory.build(:notification, :status => Notification::CANCELLED).active?
   end
 
   #----------------------------------------------------------------------------#

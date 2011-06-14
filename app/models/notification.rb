@@ -6,17 +6,35 @@ class Notification < ActiveRecord::Base
   has_many :updates, :class_name => 'NotificationUpdate'
   has_many :responses, :class_name => 'NotificationResponse'
 
+  after_initialize :default_values
   before_save :generate_uuid, :unless => :uuid?
+
+  NEW = 'NEW'
+  TEMP_FAIL = 'TEMP_FAIL'
+  PERM_FAIL = 'PERM_FAIL'
+  DELIVERED = 'DELIVERED'
+  CANCELLED = 'CANCELLED'
+  ACTIVE_STATUSES = [ NEW, TEMP_FAIL ]
+  INACTIVE_STATUSES = [ PERM_FAIL, DELIVERED, CANCELLED ]
+  VALID_STATUSES = [ ACTIVE_STATUSES, INACTIVE_STATUSES ].flatten
 
   validates :uuid, :uniqueness => true
   validates :enrollment_id, :presence => true
   validates :message_id, :presence => true, :uniqueness => { :scope => :enrollment_id }
   validates :delivery_date, :presence => true
+  validates :status, :inclusion => VALID_STATUSES
+
+  def default_values
+    self.status ||= NEW
+  end
 
   def delivery_date
     self[:delivery_date] ||= calc_delivery_date
   end
 
+  def active?
+    ACTIVE_STATUSES.include?(status)
+  end
 
   protected
 
