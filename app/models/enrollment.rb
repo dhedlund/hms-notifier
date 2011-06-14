@@ -3,6 +3,7 @@ class Enrollment < ActiveRecord::Base
   has_many :notifications
 
   after_initialize :default_values
+  before_save :cancel_all_notifications, :if => :cancelled?
 
   ACTIVE = 'ACTIVE'
   COMPLETED = 'COMPLETED'
@@ -33,6 +34,18 @@ class Enrollment < ActiveRecord::Base
 
   def cancelled?
     status == CANCELLED
+  end
+
+
+  protected
+
+  def cancel_all_notifications
+    active_notifications = notifications.active
+    active_notifications.each do |notification|
+      notification.update_attributes(:status => Notification::CANCELLED)
+    end
+
+    active_notifications.all?(&:cancelled?)
   end
 
 end

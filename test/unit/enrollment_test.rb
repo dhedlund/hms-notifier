@@ -72,6 +72,28 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert Factory.build(:enrollment, :status => Enrollment::CANCELLED).valid?
   end
 
+  test "setting status to cancelled should also cancel active notifications" do
+    enrollment = Factory.create(:enrollment)
+    3.times do
+      m = Factory.create(:message, :message_stream => enrollment.message_stream)
+      enrollment.notifications.create(:message => m)
+    end
+
+    enrollment.update_attributes(:status => Enrollment::CANCELLED)
+    assert enrollment.notifications.all?(&:cancelled?)
+  end
+
+  test "setting status to cancelled should not cancel inactive notifications" do
+    enrollment = Factory.create(:enrollment)
+    3.times do
+      m = Factory.create(:message, :message_stream => enrollment.message_stream)
+      enrollment.notifications.create(:message => m, :status => Notification::PERM_FAIL)
+    end
+
+    enrollment.update_attributes(:status => Enrollment::CANCELLED)
+    assert enrollment.notifications.none?(&:cancelled?)
+  end
+
   #----------------------------------------------------------------------------#
   # phone_number:
   #--------------
