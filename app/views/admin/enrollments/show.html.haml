@@ -30,3 +30,21 @@
   %tr
     %th Last Updated
     %td= @enrollment.updated_at.strftime '%b %e, %Y @ %r %Z'
+
+%h2 Notifications
+%table
+  %tr
+    %th ID
+    %th Enrollment
+    %th Message
+    %th Start
+    %th Status
+    %th Delivered At
+  - @notifications.each do |notification|
+    %tr
+      %td= link_to notification.id, [:admin, notification]
+      %td= notification.enrollment_id
+      %td= notification.message_id
+      %td= notification.delivery_date.strftime '%Y-%m-%d'
+      %td= notification.status
+      %td= notification.delivered_at.try(:strftime, '%Y-%m-%d')

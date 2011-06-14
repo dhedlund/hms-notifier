@@ -33,6 +33,7 @@ class Admin::EnrollmentsControllerTest < ActionController::TestCase
     get :show, :id => enrollment.id
     assert_response :success
     assert_not_nil assigns(:enrollment)
+    assert_not_nil assigns(:notifications)
   end
 
   test "show should return a enrollment (JSON)" do

@@ -8,6 +8,7 @@ class Admin::EnrollmentsController < AdminController
 
   def show
     @enrollment = Enrollment.find(params[:id])
+    @notifications = @enrollment.notifications
     respond_with @enrollment
   end
 
