@@ -34,6 +34,8 @@ class NotificationUpdate < ActiveRecord::Base
 
     message = notification.try(:message)
     self.message_path = message.try(:path)
+
+    self.action = CANCEL if notification.try(:status) == Notification::CANCELLED
   end
 
 end

@@ -138,4 +138,19 @@ class NotificationUpdateTest < ActiveSupport::TestCase
     assert_not_nil update.preferred_time
   end
 
+  test "assigning a cancelled notification should set action as CANCEL" do
+    notification = Factory.create(:notification, :status => Notification::CANCELLED)
+    update = Factory.build(:notification_update, :notification => nil)
+    update.notification = notification
+    assert_equal NotificationUpdate::CANCEL, update.action
+  end
+
+  test "assigning notification w/ non-cancel action should not change action" do
+    notification = Factory.create(:notification, :status => Notification::PERM_FAIL)
+    update = Factory.build(:notification_update, :notification => nil)
+    orig_action = update.action
+    update.notification = notification
+    assert_equal orig_action, update.action
+  end
+
 end
