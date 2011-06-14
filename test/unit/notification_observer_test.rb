@@ -23,7 +23,7 @@ class NotificationObserverTest < ActiveSupport::TestCase
 
   test "should only create notification updates for active notifications" do
     notification = Factory.create(:notification)
-    notification.update_attributes(:status => Notification::CANCELLED)
+    notification.update_attributes(:status => Notification::PERM_FAIL)
     notification.delivery_date += 1
     assert_no_difference('NotificationUpdate.count') { notification.save! }
   end
@@ -33,6 +33,26 @@ class NotificationObserverTest < ActiveSupport::TestCase
     n.delivery_date += 1
     n.save!
     assert_equal n.delivery_date, n.updates.last.delivery_date
+  end
+
+  test "changing a notification to cancelled should create a CANCEL update" do
+    notification = Factory.create(:notification)
+    assert_difference('NotificationUpdate.count') do
+      notification.update_attributes(:status => Notification::CANCELLED)
+    end
+    assert_equal NotificationUpdate::CANCEL, notification.updates.last.action
+  end
+
+  test "changing a notification after cancelled should not create an update" do
+    notification = Factory.create(:notification)
+    notification.update_attributes(:status => Notification::CANCELLED)
+
+    assert_no_difference('NotificationUpdate.count') do
+      notification.update_attributes(:status => Notification::TEMP_FAIL)
+    end
+
+    notification.delivery_date += 1
+    assert_no_difference('NotificationUpdate.count') { notification.save! }
   end
 
   #----------------------------------------------------------------------------#
@@ -85,7 +105,7 @@ class NotificationObserverTest < ActiveSupport::TestCase
     notifications = 3.times.map do
       m = Factory.create(:message, :message_stream => enrollment.message_stream)
       n = enrollment.notifications.create(:message => m)
-      n.update_attributes(:status => Notification::CANCELLED)
+      n.update_attributes(:status => Notification::PERM_FAIL)
     end
 
     enrollment.delivery_method = 'IVR'

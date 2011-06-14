@@ -11,12 +11,16 @@ class NotificationObserver < ActiveRecord::Observer
 
   def record_update(o, action)
     notifications = o.respond_to?(:notifications) ? o.notifications.reload : [o]
-    notifications.select(&:active?).each do |notification|
+    notifications.select { |n| n.active? || n.cancelled? }.each do |notification|
+      action = NotificationUpdate::CANCEL if notification.cancelled?
+
       update = notification.updates.last.try(:clone) || NotificationUpdate.new
+      next if update.action == NotificationUpdate::CANCEL
+
       update.changed_attributes.clear
       update.notification = notification
 
-      if update.changed?
+      if update.changed? || notification.cancelled?
         update.action = action
         notification.updates << update
       end
