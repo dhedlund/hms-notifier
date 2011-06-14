@@ -44,6 +44,35 @@ class EnrollmentTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # status:
+  #--------
+  test "status should default to 'ACTIVE'" do
+    assert_equal Enrollment::ACTIVE, Factory.build(:enrollment).status
+  end
+
+  test "should be invalid without a status" do
+    enrollment = Factory.build(:enrollment)
+    enrollment.status = nil
+    assert enrollment.invalid?
+  end
+
+  test "should be invalid with an unknown status" do
+    assert Factory.build(:enrollment, :status => 'CONFUSED').invalid?
+  end
+
+  test "ACTIVE is a valid status" do
+    assert Factory.build(:enrollment, :status => Enrollment::ACTIVE).valid?
+  end
+
+  test "COMPLETED is a valid status" do
+    assert Factory.build(:enrollment, :status => Enrollment::COMPLETED).valid?
+  end
+
+  test "CANCELLED is a valid status" do
+    assert Factory.build(:enrollment, :status => Enrollment::CANCELLED).valid?
+  end
+
+  #----------------------------------------------------------------------------#
   # phone_number:
   #--------------
   test "should be invalid without a phone_number" do
@@ -87,6 +116,32 @@ class EnrollmentTest < ActiveSupport::TestCase
     enrollment.notifications.create!(:message_id => messages[5].id)
     assert enrollment.ready_messages.exclude?(messages[4])
     assert enrollment.ready_messages.exclude?(messages[5])
+  end
+
+  #----------------------------------------------------------------------------#
+  # active?:
+  #---------
+  test "enrollment is active if it has a status of ACTIVE" do
+    assert Factory.build(:enrollment, :status => Enrollment::ACTIVE).active?
+  end
+
+  test "enrollment is not active if it has a status of COMPLETED" do
+    assert !Factory.build(:enrollment, :status => Enrollment::COMPLETED).active?
+  end
+
+  test "enrollment is not active if it has a status of CANCELLED" do
+    assert !Factory.build(:enrollment, :status => Enrollment::CANCELLED).active?
+  end
+
+  #----------------------------------------------------------------------------#
+  # cancelled?:
+  #------------
+  test "cancelled enrollments should report themselves as being cancelled" do
+    assert Factory.build(:enrollment, :status => Enrollment::CANCELLED).cancelled?
+  end
+
+  test "non-cancelled enrollments should not report themselves as cancelled" do
+    assert !Factory.build(:enrollment, :status => Enrollment::COMPLETED).cancelled?
   end
 
   #----------------------------------------------------------------------------#
