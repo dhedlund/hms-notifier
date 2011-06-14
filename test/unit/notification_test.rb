@@ -85,7 +85,9 @@ class NotificationTest < ActiveSupport::TestCase
   test "should be invalid without a delivery_date" do
     notification = Factory.build(:notification)
     notification.delivery_date = nil
-    notification.invalid?
+    notification.message = nil
+    assert notification.invalid?
+    assert notification.errors[:delivery_date]
   end
 
   test "should calculate delivery date if message and enrollment" do
