@@ -48,7 +48,7 @@ class NotificationObserverTest < ActiveSupport::TestCase
     notification.update_attributes(:status => Notification::CANCELLED)
 
     assert_no_difference('NotificationUpdate.count') do
-      notification.update_attributes(:status => Notification::TEMP_FAIL)
+      notification.update_attributes(:status => Notification::PERM_FAIL)
     end
 
     notification.delivery_date += 1

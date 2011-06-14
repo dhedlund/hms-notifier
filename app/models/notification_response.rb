@@ -11,6 +11,7 @@ class NotificationResponse < ActiveRecord::Base
 
   def update_notification
     return true if status == notification.status
+
     notification.status = status
     notification.delivered_at = delivered_at
 

@@ -7,6 +7,7 @@ class Notification < ActiveRecord::Base
   has_many :responses, :class_name => 'NotificationResponse'
 
   after_initialize :default_values
+  before_validation :prevent_reactivation
   before_save :generate_uuid, :unless => :uuid?
 
   NEW = 'NEW'
@@ -54,6 +55,19 @@ class Notification < ActiveRecord::Base
 
   def generate_uuid
     write_attribute :uuid, UUID.generate
+  end
+
+  def prevent_reactivation
+    return true unless changes[:status]
+
+    before, after = changes[:status]
+    if INACTIVE_STATUSES.include?(before) && ACTIVE_STATUSES.include?(after)
+      # attempting to reactivate an inactive notification
+      errors.add(:status, 'cannot change from inactive to active')
+      false
+    else
+      true
+    end
   end
 
 end

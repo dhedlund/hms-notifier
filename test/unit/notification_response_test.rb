@@ -44,6 +44,16 @@ class NotificationResponseTest < ActiveSupport::TestCase
     assert_equal response.delivered_at, response.notification.delivered_at
   end
 
+  test "updating status from inactive to active should not change anything" do
+    n = Factory.create(:notification, :status => Notification::CANCELLED)
+    response = Factory.create(:notification_response,
+      :status => 'TEMP_FAIL',
+      :delivered_at => 1.day.ago
+    )
+    assert_equal Notification::CANCELLED, n.status
+    assert_nil n.delivered_at
+  end
+
   test "should not raise error when saving w/ invalid status" do
     response = Factory.create(:notification_response, :status => 'EARTH_NOT_FOUND')
     orig_status = response.notification.status

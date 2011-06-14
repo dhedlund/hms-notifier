@@ -50,6 +50,30 @@ class NotificationTest < ActiveSupport::TestCase
     assert Factory.build(:notification, :status => Notification::CANCELLED).valid?
   end
 
+  test "changing from an active to an active status should be valid" do
+    n = Factory.create(:notification, :status => Notification::NEW)
+    n.status = Notification::TEMP_FAIL
+    assert n.valid?
+  end
+
+  test "changing from an active to an inactive status should be valid" do
+    n = Factory.create(:notification, :status => Notification::TEMP_FAIL)
+    n.status = Notification::DELIVERED
+    assert n.valid?
+  end
+
+  test "changing from inactive status to an inactive status should be valid" do
+    n = Factory.create(:notification, :status => Notification::CANCELLED)
+    n.status = Notification::PERM_FAIL
+    assert n.valid?
+  end
+
+  test "changing from inactive status to an active status should be invalid" do
+    n = Factory.create(:notification, :status => Notification::CANCELLED)
+    n.status = Notification::TEMP_FAIL
+    assert n.invalid?
+  end
+
   #----------------------------------------------------------------------------#
   # uuid:
   #------
