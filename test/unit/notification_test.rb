@@ -170,4 +170,18 @@ class NotificationTest < ActiveSupport::TestCase
     end
   end
 
+  #----------------------------------------------------------------------------#
+  # scopes:
+  #--------
+  test "active scope: returns notifications with statuses considered active" do
+    enrollment = Factory.create(:enrollment)
+    Notification::VALID_STATUSES.each do |status|
+      m = Factory.create(:message, :message_stream => enrollment.message_stream)
+      n = enrollment.notifications.create(:message => m, :status => status)
+    end
+
+    active_notifications = enrollment.notifications.active
+    assert_equal Notification::ACTIVE_STATUSES.sort, active_notifications.map(&:status).sort
+  end
+
 end

@@ -24,6 +24,8 @@ class Notification < ActiveRecord::Base
   validates :delivery_date, :presence => true
   validates :status, :inclusion => VALID_STATUSES
 
+  scope :active, where(:status => ACTIVE_STATUSES)
+
   def default_values
     self.status ||= NEW
   end
@@ -35,6 +37,7 @@ class Notification < ActiveRecord::Base
   def active?
     ACTIVE_STATUSES.include?(status)
   end
+
 
   protected
 
