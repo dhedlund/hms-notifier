@@ -31,6 +31,7 @@ class NotificationUpdate < ActiveRecord::Base
     self.phone_number = enrollment.try(:phone_number)
     self.preferred_time = enrollment.try(:preferred_time)
     self.delivery_method = enrollment.try(:delivery_method)
+    self.ext_user_id = enrollment.try(:ext_user_id)
 
     message = notification.try(:message)
     self.message_path = message.try(:path)

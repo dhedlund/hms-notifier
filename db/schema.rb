@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110614141049) do
+ActiveRecord::Schema.define(:version => 20110614170944) do
 
   create_table "enrollments", :force => true do |t|
     t.string   "first_name"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(:version => 20110614141049) do
     t.date     "stream_start"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "ext_user_id"
   end
 
   add_index "enrollments", ["message_stream_id"], :name => "index_enrollments_on_message_stream_id"
@@ -71,6 +72,7 @@ ActiveRecord::Schema.define(:version => 20110614141049) do
     t.integer  "response_code"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "ext_user_id"
   end
 
   add_index "notification_updates", ["notification_id"], :name => "index_notification_updates_on_notification_id"

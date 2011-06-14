@@ -53,6 +53,12 @@ class NotificationUpdateTest < ActiveSupport::TestCase
     assert update.valid?
   end
 
+  test "should be valid without an ext_user_id" do
+    update = Factory.build(:notification_update)
+    update.ext_user_id = nil
+    assert update.valid?
+  end
+
   test "should be sorted by id in ascending order" do
     n = Factory.create(:notification)
     [10,6,29,8,3].each do |id|
@@ -144,6 +150,14 @@ class NotificationUpdateTest < ActiveSupport::TestCase
     update = Factory.build(:notification_update, :notification => nil)
     update.notification = notification
     assert_not_nil update.preferred_time
+  end
+
+  test "assigning a notification should set ext_user_id" do
+    enrollment = Factory.create(:enrollment, :ext_user_id => 'x344493y:4')
+    notification = Factory.create(:notification, :enrollment => enrollment)
+    update = Factory.build(:notification_update, :notification => nil)
+    update.notification = notification
+    assert_equal enrollment.ext_user_id, update.ext_user_id
   end
 
   test "assigning a cancelled notification should set action as CANCEL" do
