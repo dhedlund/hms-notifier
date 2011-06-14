@@ -38,7 +38,7 @@
     %th Response
   - @notification_updates.each do |update|
     %tr
-      %td= link_to update.id, admin_notification_notification_update_path(update)
+      %td= link_to update.id, admin_notification_notification_update_path(@notification, update)
       %td= update.created_at.strftime '%Y-%m-%d'
       %td= update.action
       %td= update.uploaded_at.present? ? 'Y' : ''
