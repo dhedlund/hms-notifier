@@ -44,6 +44,40 @@ class EnrollmentTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # ready_messages:
+  #----------------
+  test "ready_messages should get messages within notifiable range (-1 to 5)" do
+    stream = Factory.create(:message_stream)
+    messages = (3..15).map do |d|
+      Factory.create(:message, :message_stream => stream, :offset_days => d)
+    end
+
+    enrollment = Factory.create(:enrollment,
+      :message_stream => stream,
+      :stream_start => Date.today - 6
+    )
+
+    assert_equal messages[2..8], enrollment.ready_messages
+  end
+
+  test "ready_messages should not include messages already as notifications" do
+    stream = Factory.create(:message_stream)
+    messages = (3..15).map do |d|
+      Factory.create(:message, :message_stream => stream, :offset_days => d)
+    end
+
+    enrollment = Factory.create(:enrollment,
+      :message_stream => stream,
+      :stream_start => Date.today - 6
+    )
+
+    enrollment.notifications.create!(:message_id => messages[4].id)
+    enrollment.notifications.create!(:message_id => messages[5].id)
+    assert enrollment.ready_messages.exclude?(messages[4])
+    assert enrollment.ready_messages.exclude?(messages[5])
+  end
+
+  #----------------------------------------------------------------------------#
   # relationship w/ MessageStream:
   #-------------------------------
   test "can access message stream from enrollment" do

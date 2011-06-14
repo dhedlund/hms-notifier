@@ -7,4 +7,12 @@ class Enrollment < ActiveRecord::Base
   validates :phone_number, :presence => true
   validates :delivery_method, :presence => true
   validates :stream_start, :presence => true
+
+  def ready_messages
+    offset_days = (Date.today - stream_start).to_i
+    possible = message_stream.messages.notifiable(offset_days)
+    existing = notifications.map(&:message)
+    possible - existing
+  end
+
 end
