@@ -121,6 +121,17 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # cancelled?:
+  #------------
+  test "cancelled notifications should report themselves as being cancelled" do
+    assert Factory.build(:notification, :status => Notification::CANCELLED).cancelled?
+  end
+
+  test "non-cancelled notifications should not report themselves as cancelled" do
+    assert !Factory.build(:notification, :status => Notification::PERM_FAIL).cancelled?
+  end
+
+  #----------------------------------------------------------------------------#
   # relationship w/ Enrollment:
   #----------------------------
   test "should be invalid without an enrollment_id" do

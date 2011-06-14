@@ -38,6 +38,10 @@ class Notification < ActiveRecord::Base
     ACTIVE_STATUSES.include?(status)
   end
 
+  def cancelled?
+    status == CANCELLED
+  end
+
 
   protected
 
