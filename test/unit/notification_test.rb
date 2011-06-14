@@ -9,12 +9,6 @@ class NotificationTest < ActiveSupport::TestCase
     assert Factory.build(:notification).valid?
   end
 
-  test "preferred_time is optional" do
-    notification = Factory.build(:notification)
-    notification.preferred_time = nil
-    assert notification.valid?
-  end
-
   test "delivered_at is optional" do
     assert Factory.build(:notification, :delivered_at => nil).valid?
   end
@@ -77,12 +71,6 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "can access enrollment from notification" do
     assert Factory.build(:notification).enrollment
-  end
-
-  test "should copy preferred time from enrollment" do
-    enrollment = Factory.create(:enrollment)
-    notification = Notification.new(:enrollment => enrollment)
-    assert_equal enrollment.preferred_time, notification.preferred_time
   end
 
   #----------------------------------------------------------------------------#

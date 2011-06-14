@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110610091100) do
+ActiveRecord::Schema.define(:version => 20110614115358) do
 
   create_table "enrollments", :force => true do |t|
     t.string   "first_name"
@@ -81,7 +81,6 @@ ActiveRecord::Schema.define(:version => 20110610091100) do
     t.integer  "enrollment_id"
     t.integer  "message_id"
     t.date     "delivery_date"
-    t.string   "preferred_time"
     t.datetime "delivered_at"
     t.string   "status"
     t.datetime "created_at"

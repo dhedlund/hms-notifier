@@ -25,11 +25,11 @@ class NotificationUpdate < ActiveRecord::Base
 
   def cache_notification_data
     self.delivery_date = notification.try(:delivery_date)
-    self.preferred_time = notification.try(:preferred_time)
 
     enrollment = notification.try(:enrollment)
     self.first_name = enrollment.try(:first_name)
     self.phone_number = enrollment.try(:phone_number)
+    self.preferred_time = enrollment.try(:preferred_time)
     self.delivery_method = enrollment.try(:delivery_method)
 
     message = notification.try(:message)
