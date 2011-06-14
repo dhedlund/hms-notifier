@@ -140,6 +140,22 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert enrollment.ready_messages.exclude?(messages[5])
   end
 
+  test "should not return any ready messages if enrollment is not active" do
+    stream = Factory.create(:message_stream)
+    messages = (3..15).map do |d|
+      Factory.create(:message, :message_stream => stream, :offset_days => d)
+    end
+
+    enrollment = Factory.create(:enrollment,
+      :message_stream => stream,
+      :stream_start => Date.today - 6,
+      :status => Enrollment::CANCELLED
+    )
+
+    assert enrollment.ready_messages.empty?
+
+  end
+
   #----------------------------------------------------------------------------#
   # active?:
   #---------

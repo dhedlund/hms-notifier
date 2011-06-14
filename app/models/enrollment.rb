@@ -22,6 +22,8 @@ class Enrollment < ActiveRecord::Base
   end
 
   def ready_messages
+    return [] unless active?
+
     offset_days = (Date.today - stream_start).to_i
     possible = message_stream.messages.notifiable(offset_days)
     existing = notifications.map(&:message)
