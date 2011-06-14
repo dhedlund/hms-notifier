@@ -53,6 +53,14 @@ class NotificationUpdateTest < ActiveSupport::TestCase
     assert update.valid?
   end
 
+  test "should be sorted by id in ascending order" do
+    n = Factory.create(:notification)
+    [10,6,29,8,3].each do |id|
+      update = Factory.create(:notification_update, :notification => n, :id => id)
+    end
+    assert_equal n.updates.map(&:id).sort, n.updates.map(&:id)
+  end
+
   #----------------------------------------------------------------------------#
   # action:
   #--------
