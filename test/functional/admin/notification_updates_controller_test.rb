@@ -29,7 +29,7 @@ class Admin::NotificationUpdatesControllerTest < ActionController::TestCase
 
     get :index, :notification_id => notification.id, :format => :json
     assert_response :success
-    assert_equal 4, json_response.count
+    assert_equal 5, json_response.count
   end
 
   test "show should return a notification_update (HTML)" do
