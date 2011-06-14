@@ -17,10 +17,6 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert Factory.build(:enrollment, :last_name => nil).invalid?
   end
 
-  test "should be invalid without a phone_number" do
-    assert Factory.build(:enrollment, :phone_number => nil).invalid?
-  end
-
   test "should be invalid without a delivery_method" do
     assert Factory.build(:enrollment, :delivery_method => nil).invalid?
   end
@@ -41,6 +37,18 @@ class EnrollmentTest < ActiveSupport::TestCase
   test "should be able to retrieve the updated_at date" do
     @enrollment.save!
     assert_not_nil @enrollment.updated_at
+  end
+
+  #----------------------------------------------------------------------------#
+  # phone_number:
+  #--------------
+  test "should be invalid without a phone_number" do
+    assert Factory.build(:enrollment, :phone_number => nil).invalid?
+  end
+
+  test "should be able to store symbols with phone numbers (i.e. country)" do
+    enrollment = Factory.build(:enrollment, :phone_number => '+11 (4) 302 1432')
+    assert_equal '+11 (4) 302 1432', enrollment.phone_number
   end
 
   #----------------------------------------------------------------------------#
