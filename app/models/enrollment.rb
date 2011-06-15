@@ -3,6 +3,7 @@ class Enrollment < ActiveRecord::Base
   has_many :notifications
 
   after_initialize :default_values
+  before_validation :prevent_duplicate_enrollments
   before_save :cancel_all_notifications, :if => :cancelled?
 
   ACTIVE = 'ACTIVE'
@@ -40,6 +41,19 @@ class Enrollment < ActiveRecord::Base
 
 
   protected
+
+  def prevent_duplicate_enrollments
+    duplicates = Enrollment.where(
+      :status => ACTIVE,
+      :phone_number => phone_number,
+      :message_stream_id => message_stream_id
+    )
+    duplicates = duplicates.where('id != ?', id) if id
+    return true if duplicates.none?
+
+    errors.add(:base, 'would create a duplicate active enrollment')
+    false
+  end
 
   def cancel_all_notifications
     active_notifications = notifications.active

@@ -106,6 +106,69 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert_equal '+11 (4) 302 1432', enrollment.phone_number
   end
 
+  test "should be able to create multiple enrollments with same phone number" do
+    assert_difference('Enrollment.count', 2) do
+      2.times { enrollment = Factory.create(:enrollment, :phone_number => '12345') }
+    end
+  end
+
+  test "should not be able to create two active enrollments to same stream" do
+    stream = Factory.create(:message_stream)
+    enrollments = 2.times.map do
+      Factory.build(:enrollment,
+        :phone_number => '12345',
+        :message_stream => stream,
+        :status => Enrollment::ACTIVE
+      )
+    end
+    assert enrollments.first.save
+    assert enrollments.last.invalid?
+  end
+
+  test "should be able to create new active enrollment if one inactive" do
+    stream = Factory.create(:message_stream)
+    Factory.create(:enrollment,
+      :phone_number => '12345',
+      :message_stream => stream,
+      :status => Enrollment::COMPLETED
+    )
+    enrollment = Factory.build(:enrollment,
+      :phone_number => '12345',
+      :message_stream => stream,
+      :status => Enrollment::ACTIVE
+    )
+    assert enrollment.save
+  end
+
+  test "should be able to reactivate an enrollment if both inactive" do
+    stream = Factory.create(:message_stream)
+    enrollments = 2.times.map do
+      Factory.create(:enrollment,
+        :phone_number => '12345',
+        :message_stream => stream,
+        :status => Enrollment::CANCELLED
+      )
+    end
+    enrollment = enrollments.last
+    enrollment.status = Enrollment::ACTIVE
+    assert enrollment.save
+  end
+
+  test "should not be able to reactive second enrollment if first active" do
+    stream = Factory.create(:message_stream)
+    enrollments = 2.times.map do
+      Factory.create(:enrollment,
+        :phone_number => '12345',
+        :message_stream => stream,
+        :status => Enrollment::CANCELLED
+      )
+    end
+    enrollments.first.update_attributes(:status => Enrollment::ACTIVE)
+    enrollment = enrollments.last
+    enrollment.status = Enrollment::ACTIVE
+    assert !enrollment.save
+  end
+
   #----------------------------------------------------------------------------#
   # ready_messages:
   #----------------
