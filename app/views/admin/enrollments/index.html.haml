@@ -6,6 +6,7 @@
     %th Phone Number
     %th Delivery Method
     %th Stream Start
+    %th Status
   - @enrollments.each do |enrollment|
     %tr
       %td= link_to enrollment.id, [:admin, enrollment]
@@ -13,3 +14,4 @@
       %td= enrollment.phone_number
       %td= enrollment.delivery_method
       %td= enrollment.stream_start.strftime '%Y-%m-%d'
+      %td= enrollment.status
