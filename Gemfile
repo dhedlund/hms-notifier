@@ -7,6 +7,8 @@ gem 'sqlite3'
 gem 'haml'
 gem 'uuid'
 gem 'rest-client'
+#temporary require to get fastercsv on hotline server while local.  may use in reporting rake later
+gem 'fastercsv'
 
 group :development, :test do
   gem 'rails3-generators'
