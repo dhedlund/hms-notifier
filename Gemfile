@@ -6,6 +6,7 @@ gem 'mysql'
 gem 'sqlite3'
 gem 'haml'
 gem 'uuid'
+gem 'rest-client'
 
 group :development, :test do
   gem 'rails3-generators'
