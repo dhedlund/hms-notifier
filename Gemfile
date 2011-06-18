@@ -18,6 +18,11 @@ group :development, :test do
   gem 'mocha'
 end
 
+group :production do
+  gem 'mongrel'
+end
+
+
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
