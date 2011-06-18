@@ -3,7 +3,6 @@ source 'http://rubygems.org'
 gem 'rails', '3.0.7'
 
 gem 'mysql'
-gem 'sqlite3'
 gem 'haml'
 gem 'uuid'
 gem 'rest-client'
@@ -11,6 +10,7 @@ gem 'rest-client'
 gem 'fastercsv'
 
 group :development, :test do
+  gem 'sqlite3'
   gem 'rails3-generators'
   gem 'haml-rails'
   gem 'factory_girl_rails'
