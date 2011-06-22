@@ -262,4 +262,18 @@ class EnrollmentTest < ActiveSupport::TestCase
     end
   end
 
+  #----------------------------------------------------------------------------#
+  # scopes:
+  #--------
+  test "active scope: returns enrollments with an ACTIVE status" do
+    stream = Factory.create(:message_stream)
+    Enrollment::VALID_STATUSES.each do |status|
+      Factory.create(:enrollment, :message_stream => stream, :status => status)
+    end
+
+    active_enrollments = Enrollment.active
+    assert_equal 1, active_enrollments.size
+    assert_equal Enrollment::ACTIVE, active_enrollments[0].status
+  end
+
 end

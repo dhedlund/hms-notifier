@@ -18,6 +18,8 @@ class Enrollment < ActiveRecord::Base
   validates :stream_start, :presence => true
   validates :status, :inclusion => VALID_STATUSES
 
+  scope :active, where(:status => ACTIVE)
+
   def default_values
     self.status ||= ACTIVE
   end
