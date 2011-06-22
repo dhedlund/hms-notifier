@@ -175,4 +175,16 @@ class NotificationUpdateTest < ActiveSupport::TestCase
     assert_equal orig_action, update.action
   end
 
+  #----------------------------------------------------------------------------#
+  # scopes:
+  #--------
+  test "pending scope: returns updates that have not been uploaded to hub" do
+    3.times do
+      n = Factory.create(:notification)
+      n.updates.each { |u| u.update_attributes(:uploaded_at => 2.days.ago) }
+    end
+    2.times { Factory.create(:notification) }
+    assert_equal 2, NotificationUpdate.pending.count
+  end
+
 end

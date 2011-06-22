@@ -14,6 +14,8 @@ class NotificationUpdate < ActiveRecord::Base
   validates :message_path, :presence => true
   validates :delivery_date, :presence => true
 
+  scope :pending, where(:uploaded_at => nil)
+
   alias_method :orig_notification=, :notification=
   def notification=(value)
     self.orig_notification=(value)
