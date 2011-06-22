@@ -44,6 +44,28 @@ class EnrollmentTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # enqueue_ready_messages:
+  #------------------------
+  test "enqueue_ready_messages should get a list of ready messages" do
+    @enrollment.save!
+    @enrollment.expects(:ready_messages).returns([])
+    @enrollment.enqueue_ready_messages
+  end
+
+  test "enqueue_ready_messages should create notifications from messages" do
+    @enrollment.save!
+    messages = 3.times.map do
+      Factory.create(:message, :message_stream => @enrollment.message_stream)
+    end
+
+    @enrollment.expects(:ready_messages).returns(messages)
+    assert_difference('@enrollment.notifications.count', 3) do
+      @enrollment.enqueue_ready_messages
+    end
+  end
+
+
+  #----------------------------------------------------------------------------#
   # status:
   #--------
   test "status should default to 'ACTIVE'" do

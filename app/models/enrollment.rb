@@ -33,6 +33,10 @@ class Enrollment < ActiveRecord::Base
     possible - existing
   end
 
+  def enqueue_ready_messages
+    ready_messages.each { |m| notifications.create!(:message => m) }
+  end
+
   def active?
     status == ACTIVE
   end
