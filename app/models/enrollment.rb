@@ -19,6 +19,8 @@ class Enrollment < ActiveRecord::Base
   validates :status, :inclusion => VALID_STATUSES
 
   scope :active, where(:status => ACTIVE)
+  scope :completed, where(:status => COMPLETED)
+  scope :cancelled, where(:status => CANCELLED)
 
   def default_values
     self.status ||= ACTIVE

@@ -298,4 +298,26 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert_equal Enrollment::ACTIVE, active_enrollments[0].status
   end
 
+  test "completed scope: returns enrollments with a COMPLETED status" do
+    stream = Factory.create(:message_stream)
+    Enrollment::VALID_STATUSES.each do |status|
+      Factory.create(:enrollment, :message_stream => stream, :status => status)
+    end
+
+    completed_enrollments = Enrollment.completed
+    assert_equal 1, completed_enrollments.size
+    assert_equal Enrollment::COMPLETED, completed_enrollments[0].status
+  end
+
+  test "cancelled scope: returns enrollments with a CANCELLED status" do
+    stream = Factory.create(:message_stream)
+    Enrollment::VALID_STATUSES.each do |status|
+      Factory.create(:enrollment, :message_stream => stream, :status => status)
+    end
+
+    cancelled_enrollments = Enrollment.cancelled
+    assert_equal 1, cancelled_enrollments.size
+    assert_equal Enrollment::CANCELLED, cancelled_enrollments[0].status
+  end
+
 end
