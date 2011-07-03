@@ -9,31 +9,43 @@ class HubAPI
   end
 
   def get(path, options={})
-    handle_request :get, "#{@base_uri}#{path}", options
+    handle_request :get, "#{@base_uri}#{path}", nil, options
+  end
+
+  def post(path, payload, options={})
+    handle_request :post, "#{@base_uri}#{path}", payload, options
   end
 
 
   protected
 
-  def handle_request(method, uri, options={})
+  def handle_request(method, uri, payload, options={})
+    options[:accept] = :json
+
     begin
-      res = RestClient.send(method, uri, {:accept, :json})
-      log_request(Logger::INFO, method, uri, options)
+      if [:post, :patch, :put].include?(method)
+        options[:content_type] = :json
+        res = RestClient.send(method, uri, payload.to_json, options)
+      else
+        res = RestClient.send(method, uri, options)
+      end
+
+      log_request(Logger::INFO, method, uri, payload, options)
       log_response(Logger::INFO, res)
       data = ActiveSupport::JSON.decode res
 
     rescue RestClient::Exception => e
-      log_request(Logger::ERROR, method, uri, options)
+      log_request(Logger::ERROR, method, uri, payload, options)
       log_response(Logger::ERROR, e.response)
       raise
 
     rescue Errno::ETIMEDOUT => e
-      log_request(Logger::WARN, method, uri, options)
+      log_request(Logger::WARN, method, uri, payload, options)
       @logger.warn e.to_s # known/expected, don't need full backtrace
       raise
 
     rescue => e
-      log_request(Logger::ERROR, method, uri, options)
+      log_request(Logger::ERROR, method, uri, payload, options)
       @logger.error e
       raise
     end
@@ -41,16 +53,17 @@ class HubAPI
     data
   end
 
-  def log_request(level, method, uri, options)
+  def log_request(level, method, uri, payload, options)
     m = method.to_s.upcase
     @logger.add(level, "#{m} #{filter_password(uri)} #{options.inspect}")
+    @logger.debug "PAYLOAD: #{payload.inspect}" if payload
   end
 
   def log_response(level, response)
     return unless response
     @logger.add(level, response.description)
     @logger.debug "HEADERS: #{response.headers.inspect}"
-    @logger.debug "BODY: #{response.body}"
+    @logger.debug "RES BODY: #{response.body}"
   end
 
   def filter_password(uri)
