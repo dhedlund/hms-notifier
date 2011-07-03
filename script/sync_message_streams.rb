@@ -43,7 +43,7 @@ begin
       stream.save!
     end
 
-    s['messages'].each do |m|
+    s['messages'].map {|v| v['message']}.compact.each do |m|
       unless message = stream.messages.find_by_name(m['name'])
         logger.info "creating message '#{m['name']} for stream '#{s['name']}'..."
         message = stream.messages.build
