@@ -9,7 +9,7 @@ class HubAPI
   end
 
   def get(path, options={})
-    handle_request :get, "#{@base_uri}#{path}", nil, options
+    handle_request :get, "#{@base_uri}#{path}", nil, :params => options
   end
 
   def post(path, payload, options={})
