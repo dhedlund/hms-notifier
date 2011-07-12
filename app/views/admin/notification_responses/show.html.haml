@@ -1,26 +1,29 @@
-%h1 View Notification Response
-%table
-  %tr
-    %th ID
-    %td= @notification_response.id
-  %tr
-    %th Notification ID
-    %td= link_to @notification.id, [:admin, @notification]
-  %tr
-    %th Status
-    %td= @notification_response.status
-  %tr
-    %th Delivered At
-    %td= @notification_response.delivered_at.try(:strftime, '%Y-%m-%d')
-  %tr
-    %th Error Type
-    %td= @notification_response.error_type
-  %tr
-    %th Error Message
-    %td= @notification_response.error_msg
-  %tr
-    %th Date Created
-    %td= @notification_response.created_at.strftime '%b %e, %Y @ %r %Z'
-  %tr
-    %th Last Updated
-    %td= @notification_response.updated_at.strftime '%b %e, %Y @ %r %Z'
+- @primary_nav = :notifications
+
+%h2 View Notification Response
+= form_for(admin_notification_notification_response_path(@notification, @notification_response), :html => { :class => 'admin-view' }) do |f|
+  %fieldset
+    .field
+      = f.label :id, 'ID'
+      = @notification_response.id
+    .field
+      = f.label :notification_id, 'Notification ID'
+      = link_to @notification.id, [:admin, @notification]
+    .field
+      = f.label :status
+      = @notification_response.status
+    .field
+      = f.label :delivered_at, 'Delivered At'
+      = @notification_response.delivered_at.try(:strftime, '%Y-%m-%d')
+    .field
+      = f.label :error_type, 'Error Type'
+      = @notification_response.error_type
+    .field
+      = f.label :error_msg, 'Error Message'
+      = @notification_response.error_msg
+    .field
+      = f.label :date_created, 'Date Created'
+      = @notification_response.created_at.strftime '%b %e, %Y @ %r %Z'
+    .field
+      = f.label :last_updated, 'Last Updated'
+      = @notification_response.updated_at.strftime '%b %e, %Y @ %r %Z'
