@@ -1,44 +1,47 @@
-%h1 View Notification Update
-%table
-  %tr
-    %th ID
-    %td= @notification_update.id
-  %tr
-    %th Notification ID
-    %td= link_to @notification.id, [:admin, @notification]
-  %tr
-    %th Action
-    %td= @notification_update.action
-  %tr
-    %th First Name
-    %td= @notification_update.first_name
-  %tr
-    %th Phone Number
-    %td= @notification_update.phone_number
-  %tr
-    %th Message Path
-    %td= @notification_update.message_path
-  %tr
-    %th Delivery Method
-    %td= @notification_update.delivery_method
-  %tr
-    %th Delivery Date
-    %td= @notification_update.delivery_date.strftime '%Y-%m-%d'
-  %tr
-    %th Preferred Time
-    %td= @notification_update.preferred_time
-  %tr
-    %th Delivery Expires
-    %td= @notification_update.delivery_expires.try(:strftime, '%Y-%m-%d')
-  %tr
-    %th Response Code
-    %td= @notification_update.response_code
-  %tr
-    %th Uploaded At
-    %td= @notification_update.uploaded_at.try(:strftime, '%b %e, %Y @ %r %Z')
-  %tr
-    %th Date Created
-    %td= @notification_update.created_at.strftime '%b %e, %Y @ %r %Z'
-  %tr
-    %th Last Updated
-    %td= @notification_update.updated_at.strftime '%b %e, %Y @ %r %Z'
+- @primary_nav = :notifications
+
+%h2 View Notification Update
+= form_for(admin_notification_notification_update_path(@notification, @notification_update), :html => { :class => 'admin-view' }) do |f|
+  %fieldset
+    .field
+      = f.label :id, 'ID'
+      = @notification_update.id
+    .field
+      = f.label :notification_id, 'Notification ID'
+      = link_to @notification.id, [:admin, @notification]
+    .field
+      = f.label :action
+      = @notification_update.action
+    .field
+      = f.label :first_name, 'First Name'
+      = @notification_update.first_name
+    .field
+      = f.label :phone_number, 'Phone Number'
+      = @notification_update.phone_number
+    .field
+      = f.label :message_path, 'Message Path'
+      = @notification_update.message_path
+    .field
+      = f.label :delivery_method, 'Delivery Method'
+      = @notification_update.delivery_method
+    .field
+      = f.label :delivery_date, 'Delivery Date'
+      = @notification_update.delivery_date.strftime '%Y-%m-%d'
+    .field
+      = f.label :preferred_time, 'Preferred Time'
+      = @notification_update.preferred_time
+    .field
+      = f.label :delivery_expires, 'Delivery Expires'
+      = @notification_update.delivery_expires.try(:strftime, '%Y-%m-%d')
+    .field
+      = f.label :response_code, 'Response Code'
+      = @notification_update.response_code
+    .field
+      = f.label :uploaded_at, 'Uploaded At'
+      = @notification_update.uploaded_at.try(:strftime, '%b %e, %Y @ %r %Z')
+    .field
+      = f.label :date_created, 'Date Created'
+      = @notification_update.created_at.strftime '%b %e, %Y @ %r %Z'
+    .field
+      = f.label :last_updated, 'Last Updated'
+      = @notification_update.updated_at.strftime '%b %e, %Y @ %r %Z'
