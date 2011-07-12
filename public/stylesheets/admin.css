@@ -1,0 +1,134 @@
+body {
+  background-color: #f4fad2;
+  line-height: 1.4em;
+  font-family: Arial;
+  font-size: 14px;
+}
+
+h1, h2 {
+  font-weight: bold;
+  margin: 10px 0px 5px 0px;
+}
+
+h1 { font-size: 20px; }
+h2 { font-size: 18px; }
+
+#main {
+  width: 800px;
+  padding: 20px;
+}
+
+#content {
+  padding: 20px;
+  background-color: #fff;
+  border-left: 5px solid #e1edb9;
+}
+
+#footer {
+  background-color: #888;
+  border-left: 5px solid #666;
+  padding: 10px;
+  font-size: 10px;
+  color: #fff;
+}
+
+#primary-nav {
+  height: 40px;
+  border-bottom: 10px solid #222;
+  background-color: #888;
+}
+
+#primary-nav ul {
+  height: 40px;
+}
+
+#primary-nav li {
+  height: 18px;
+  display: block; float: left;
+  padding: 10px 15px;
+  font-size: 18px;
+}
+
+#primary-nav a:link, #primary-nav a:visited, #primary-nav a:active {
+  color: #fff;
+  text-decoration: none;
+}
+
+#primary-nav .selected {
+  background-color: #ff4242;
+  border-bottom: 10px solid #b40f0f;
+  border-top: 2px solid #b40f0f;
+}
+
+.admin-table {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.admin-table th {
+  padding: 5px 10px;
+  background-color: #d4ee5e;
+}
+.admin-table td {
+  padding: 5px 10px;
+  text-align: center;
+  vertical-align: top
+}
+
+.admin-table .odd {
+  background-color: #e1edb9;
+}
+
+.admin-table .actions {
+  text-align: left;
+  text-align: right;
+}
+
+.admin-table .actions a:link, .admin-table .actions a:visited, .admin-table .actions a:active {
+  color: #b40f0f;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.admin-table .sms-text {
+  font-size: 10px;
+  white-space: normal;
+  text-align: left;
+  line-height: 1.2em;
+}
+
+div.field {
+  clear: left;
+  border-top: dashed 1px #ccc;
+  padding: 10px 0px 10px 190px;
+}
+
+.field label {
+  display: block; float: left;
+  width: 170px;
+  margin: 3px 0px 10px -190px;
+  font-weight: bold;
+}
+
+.admin-view .block-text {
+  white-space: pre-wrap;
+  text-align: left;
+  font-size: 10px;
+}
+
+#user-nav {
+  width: 100%;
+  background-color: #222;
+  border-bottom: 5px solid #b40f0f;
+  color: #ccc;
+}
+
+.site-title {
+  padding: 10px;
+  font-size: 24px;
+}
+
+.user-logged-in {
+  position: absolute;
+  top: 10px; right: 10px;
+}

@@ -1,0 +1,16 @@
+- content_for :stylesheets do
+  = stylesheet_link_tag 'admin'
+
+- content_for :content do
+  #user-nav
+    .site-title <strong>HMS</strong> Notifier
+    .user-logged-in Signed In: #{@current_user.username}
+  #main
+    #primary-nav
+      %ul
+        - primary_nav(@primary_nav).each do |i|
+          %li{i[:selected] && :class => 'selected'}= link_to i[:title], i[:path]
+    #content= yield
+    #footer Unauthorized access prohibited.
+
+= render :file => 'layouts/application'

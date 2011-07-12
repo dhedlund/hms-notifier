@@ -1,5 +1,6 @@
 class AdminController < ApplicationController
   respond_to :html
+  layout 'admin'
 
   before_filter :authenticate
 
