@@ -11,7 +11,7 @@
     %th Status
     %th Actions
   - @enrollments.each do |enrollment|
-    %tr
+    %tr{:class => cycle('even', 'odd')}
       %td= enrollment.id
       %td= enrollment.message_stream_id
       %td= enrollment.phone_number

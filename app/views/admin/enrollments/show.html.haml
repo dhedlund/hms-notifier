@@ -51,7 +51,7 @@
     %th Delivered At
     %th Actions
   - @notifications.each do |notification|
-    %tr
+    %tr{:class => cycle('even', 'odd')}
       %td= notification.id
       %td= notification.enrollment_id
       %td= notification.message_id
