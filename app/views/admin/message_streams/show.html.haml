@@ -1,29 +1,32 @@
-%h1 View Message Stream
-%table
-  %tr
-    %th ID
-    %td= @message_stream.id
-  %tr
-    %th Name
-    %td= @message_stream.name
-  %tr
-    %th Title
-    %td= @message_stream.title
-  %tr
-    %th Date Created
-    %td= @message_stream.created_at.strftime '%b %e, %Y @ %r %Z'
-  %tr
-    %th Last Updated
-    %td= @message_stream.updated_at.strftime '%b %e, %Y @ %r %Z'
+- @primary_nav = :messages
+
+%h2 View Message Stream
+= form_for(admin_message_stream_path(@message_stream), :html => { :class => 'admin-view' }) do |f|
+  %fieldset
+    .field
+      = f.label :id, 'ID'
+      = @message_stream.id
+    .field
+      = f.label :name
+      = @message_stream.name
+    .field
+      = f.label :title
+      = @message_stream.title
+    .field
+      = f.label :date_created, 'Date Created'
+      = @message_stream.created_at.strftime '%b %e, %Y @ %r %Z'
+    .field
+      = f.label :last_updated, 'Last Updated'
+      = @message_stream.updated_at.strftime '%b %e, %Y @ %r %Z'
 
 %h2 Messages
-%table
+%table.admin-table
   %tr
-    %th Offset (Days)
-    %th Name
+    %th Offset
     %th Title
+    %th Actions
   - @messages.each do |message|
-    %tr
+    %tr{:class => cycle('even', 'odd')}
       %td= message.offset_days
-      %td= link_to message.name, [:admin, @message_stream, message]
       %td= message.title
+      %td.actions #{link_to 'View', [:admin, @message_stream, message]}
