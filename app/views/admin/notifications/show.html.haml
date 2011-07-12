@@ -1,59 +1,67 @@
-%h1 View Notification
-%table
-  %tr
-    %th ID
-    %td= @notification.id
-  %tr
-    %th UUID
-    %td= @notification.uuid
-  %tr
-    %th Enrollment ID
-    %td= link_to @notification.enrollment_id, admin_enrollment_path(@notification.enrollment_id)
-  %tr
-    %th Message ID
-    %td= @notification.message_id
-  %tr
-    %th Delivery Date
-    %td= @notification.delivery_date.strftime '%b %e, %Y @ %r %Z'
-  %tr
-    %th Status
-    %td= @notification.status
-  %tr
-    %th Delivered At
-    %td= @notification.delivered_at.try(:strftime, '%b %e, %Y @ %r %Z')
-  %tr
-    %th Date Created
-    %td= @notification.created_at.strftime '%b %e, %Y @ %r %Z'
-  %tr
-    %th Last Updated
-    %td= @notification.updated_at.strftime '%b %e, %Y @ %r %Z'
+- @primary_nav = :notifications
 
-%h2 Updates/History
-%table
+%h2 View Notification
+= form_for(admin_notification_path(@notification), :html => { :class => 'admin-view' }) do |f|
+  %fieldset
+    .field
+      = f.label :id, 'ID'
+      = @notification.id
+    .field
+      = f.label :uuid, 'UUID'
+      = @notification.uuid
+    .field
+      = f.label :enrollment_id, 'Enrollment ID'
+      = link_to @notification.enrollment_id, admin_enrollment_path(@notification.enrollment_id)
+    .field
+      = f.label :message_id, 'Message ID'
+      = @notification.message_id
+    .field
+      = f.label :delivery_date, 'Delivery Date'
+      = @notification.delivery_date.strftime '%b %e, %Y @ %r %Z'
+    .field
+      = f.label :status
+      = @notification.status
+    .field
+      = f.label :delivered_at, 'Delivered At'
+      = @notification.delivered_at.try(:strftime, '%b %e, %Y @ %r %Z')
+    .field
+      = f.label :date_created, 'Date Created'
+      = @notification.created_at.strftime '%b %e, %Y @ %r %Z'
+    .field
+      = f.label :last_updated, 'Last Updated'
+      = @notification.updated_at.strftime '%b %e, %Y @ %r %Z'
+
+%h2 Updates
+%table.admin-table
   %tr
     %th ID
     %th Date
     %th Action
     %th Uploaded
     %th Response
+    %th Actions
   - @notification_updates.each do |update|
-    %tr
-      %td= link_to update.id, admin_notification_notification_update_path(@notification, update)
+    %tr{:class => cycle('even', 'odd')}
+      %td= update.id
       %td= update.created_at.strftime '%Y-%m-%d'
       %td= update.action
       %td= update.uploaded_at.present? ? 'Y' : ''
       %td= update.response_code
+      %td.actions #{link_to 'View', admin_notification_notification_update_path(@notification, update)}
 
 %h2 Responses
-%table
+- reset_cycle
+%table.admin-table
   %tr
     %th ID
     %th Date
     %th Status
     %th Error
+    %th Actions
   - @notification_responses.each do |response|
-    %tr
-      %td= link_to response.id, admin_notification_notification_response_path(response)
+    %tr{:class => cycle('even', 'odd')}
+      %td= response.id
       %td= response.created_at.strftime '%Y-%m-%d'
       %td= response.status
       %td= response.error_type
+      %td #{link_to 'View', admin_notification_notification_response_path(@notification, response)}
