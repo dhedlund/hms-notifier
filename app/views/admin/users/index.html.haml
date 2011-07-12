@@ -1,9 +1,13 @@
-%h1 Users
-%table
+- @primary_nav = :users
+
+%h2 Users
+%table.admin-table
   %tr
     %th Username
     %th Timezone
+    %th Actions
   - @users.each do |user|
-    %tr
-      %td= link_to user.username, [:admin, user]
+    %tr{:class => cycle('even', 'odd')}
+      %td= user.username
       %td= user.timezone
+      %td.actions #{link_to 'View', [:admin, user]}
