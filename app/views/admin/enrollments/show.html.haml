@@ -1,44 +1,47 @@
-%h1 View Enrollment
-%table
-  %tr
-    %th ID
-    %td= @enrollment.id
-  %tr
-    %th Message Stream ID
-    %td= link_to @enrollment.message_stream_id, admin_message_stream_path(@enrollment.message_stream_id)
-  %tr
-    %th External User ID
-    %td= @enrollment.ext_user_id
-  %tr
-    %th First Name
-    %td= @enrollment.first_name
-  %tr
-    %th Last Name
-    %td= @enrollment.last_name
-  %tr
-    %th Phone Number
-    %td= @enrollment.phone_number
-  %tr
-    %th Delivery Method
-    %td= @enrollment.delivery_method
-  %tr
-    %th Preferred Time
-    %td= @enrollment.preferred_time
-  %tr
-    %th Stream Start
-    %td= @enrollment.stream_start
-  %tr
-    %th Status
-    %td= @enrollment.status
-  %tr
-    %th Date Created
-    %td= @enrollment.created_at.strftime '%b %e, %Y @ %r %Z'
-  %tr
-    %th Last Updated
-    %td= @enrollment.updated_at.strftime '%b %e, %Y @ %r %Z'
+- @primary_nav = :enrollments
+
+%h2 View Enrollment
+= form_for(admin_enrollment_path(@enrollment), :html => { :class => 'admin-view' }) do |f|
+  %fieldset
+    .field
+      = f.label :id, 'ID'
+      = @enrollment.id
+    .field
+      = f.label :message_stream_id, 'Message Stream ID'
+      = link_to @enrollment.message_stream_id, admin_message_stream_path(@enrollment.message_stream_id)
+    .field
+      = f.label :external_user_id, 'External User ID'
+      = @enrollment.ext_user_id
+    .field
+      = f.label :first_name, 'First Name'
+      = @enrollment.first_name
+    .field
+      = f.label :last_name, 'Last Name'
+      = @enrollment.last_name
+    .field
+      = f.label :phone_number, 'Phone Number'
+      = @enrollment.phone_number
+    .field
+      = f.label :delivery_method, 'Delivery Method'
+      = @enrollment.delivery_method
+    .field
+      = f.label :preferred_time, 'Preferred Time'
+      = @enrollment.preferred_time
+    .field
+      = f.label :stream_start, 'Stream Start'
+      = @enrollment.stream_start
+    .field
+      = f.label :status
+      = @enrollment.status
+    .field
+      = f.label :date_created, 'Date Created'
+      = @enrollment.created_at.strftime '%b %e, %Y @ %r %Z'
+    .field
+      = f.label :last_updated, 'Last Updated'
+      = @enrollment.updated_at.strftime '%b %e, %Y @ %r %Z'
 
 %h2 Notifications
-%table
+%table.admin-table
   %tr
     %th ID
     %th Enrollment
@@ -46,11 +49,13 @@
     %th Start
     %th Status
     %th Delivered At
+    %th Actions
   - @notifications.each do |notification|
     %tr
-      %td= link_to notification.id, [:admin, notification]
+      %td= notification.id
       %td= notification.enrollment_id
       %td= notification.message_id
       %td= notification.delivery_date.strftime '%Y-%m-%d'
       %td= notification.status
       %td= notification.delivered_at.try(:strftime, '%Y-%m-%d')
+      %td.actions #{link_to 'View', [:admin, notification]}

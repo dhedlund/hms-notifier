@@ -1,5 +1,7 @@
-%h1 Enrollments
-%table
+- @primary_nav = :enrollments
+
+%h2 Enrollments
+%table.admin-table
   %tr
     %th ID
     %th Stream
@@ -7,11 +9,13 @@
     %th Delivery Method
     %th Stream Start
     %th Status
+    %th Actions
   - @enrollments.each do |enrollment|
     %tr
-      %td= link_to enrollment.id, [:admin, enrollment]
+      %td= enrollment.id
       %td= enrollment.message_stream_id
       %td= enrollment.phone_number
       %td= enrollment.delivery_method
       %td= enrollment.stream_start.strftime '%Y-%m-%d'
       %td= enrollment.status
+      %td.actions #{link_to 'View', [:admin, enrollment]}
