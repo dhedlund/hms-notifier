@@ -274,6 +274,13 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert Factory.build(:enrollment).message_stream
   end
 
+  test "should be invalid without a message_stream_id" do
+    enrollment = Factory.build(:enrollment)
+    enrollment.message_stream_id = nil
+    assert enrollment.invalid?
+    assert enrollment.errors[:message_stream_id].any?
+  end
+
   #----------------------------------------------------------------------------#
   # relationship w/ Notification:
   #------------------------------

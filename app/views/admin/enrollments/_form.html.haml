@@ -3,6 +3,7 @@
   = f.input :last_name
   = f.input :phone_number
   = f.input :delivery_method, :collection => ['SMS', 'IVR'], :as => :radio
+  = f.input :message_stream_id, :collection => MessageStream.all.map { |s| [s.title, s.id] }
   = f.input :stream_start, :as => :date
   = f.input :preferred_time
   = f.button :submit

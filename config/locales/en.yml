@@ -5,6 +5,7 @@ en:
         delivery_method: Delivery Method
         first_name: First Name
         last_name: Last Name
+        message_stream_id: Message Stream
         phone_number: Phone Number
         preferred_time: Preferred Time
         stream_start: Stream Start

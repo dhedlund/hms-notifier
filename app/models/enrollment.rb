@@ -17,6 +17,7 @@ class Enrollment < ActiveRecord::Base
   validates :delivery_method, :presence => true
   validates :stream_start, :presence => true
   validates :status, :inclusion => VALID_STATUSES
+  validates :message_stream_id, :presence => true
 
   scope :active, where(:status => ACTIVE)
   scope :completed, where(:status => COMPLETED)
