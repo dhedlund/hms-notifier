@@ -1,4 +1,4 @@
-- @primary_nav = :enrollments
+- @nav_hierarchy = [:enrollments, @enrollment]
 
 %h2 View Enrollment
 = form_for(admin_enrollment_path(@enrollment), :html => { :class => 'admin-view' }) do |f|

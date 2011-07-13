@@ -1,4 +1,4 @@
-- @primary_nav = :notifications
+- @nav_hierarchy = [:notifications, @notification, @notification_response]
 
 %h2 View Notification Response
 = form_for(admin_notification_notification_response_path(@notification, @notification_response), :html => { :class => 'admin-view' }) do |f|

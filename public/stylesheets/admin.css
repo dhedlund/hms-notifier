@@ -13,6 +13,12 @@ h1, h2 {
 h1 { font-size: 20px; }
 h2 { font-size: 18px; }
 
+a:link, a:visited, a:active {
+  color: #b40f0f;
+  text-decoration: none;
+  font-weight: bold;
+}
+
 #main {
   width: 800px;
   padding: 20px;
@@ -52,12 +58,22 @@ h2 { font-size: 18px; }
 #primary-nav a:link, #primary-nav a:visited, #primary-nav a:active {
   color: #fff;
   text-decoration: none;
+  font-weight: normal;
 }
 
 #primary-nav .selected {
   background-color: #ff4242;
   border-bottom: 10px solid #b40f0f;
   border-top: 2px solid #b40f0f;
+}
+
+#nav-hierarchy {
+  background-color: #e1edb9;
+  padding: 5px 15px;
+}
+
+#nav-hierarchy a:link, #nav-hierarchy a:visited, #nav-hierarchy a:active {
+  font-weight: normal;
 }
 
 .admin-table {
