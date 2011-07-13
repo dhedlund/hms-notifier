@@ -22,6 +22,9 @@
       = f.label :offset_days, 'Offset Days'
       = @message.offset_days
     .field
+      = f.label :sms_text, 'SMS Text'
+      = @message.sms_text
+    .field
       = f.label :date_created, 'Date Created'
       = @message.created_at.strftime '%b %e, %Y @ %r %Z'
     .field

@@ -94,6 +94,15 @@ class MessagesTest < ActiveSupport::TestCase
     end
   end
 
+  #----------------------------------------------------------------------------#
+  # sms_text:
+  #----------
+  test "should be valid without an sms_text" do
+    message = Factory.build(:message)
+    message.sms_text = nil
+    assert message.valid?
+  end
+
 end
 
 

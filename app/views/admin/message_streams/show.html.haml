@@ -24,9 +24,11 @@
   %tr
     %th Offset
     %th Title
+    %th Text
     %th Actions
   - @messages.each do |message|
     %tr{:class => cycle('even', 'odd')}
       %td= message.offset_days
       %td= message.title
+      %td.sms-text= message.sms_text
       %td.actions #{link_to 'View', [:admin, @message_stream, message]}
