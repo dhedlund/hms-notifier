@@ -18,4 +18,9 @@
       %td= enrollment.delivery_method
       %td= enrollment.stream_start.strftime '%Y-%m-%d'
       %td= enrollment.status
-      %td.actions #{link_to 'View', [:admin, enrollment]}
+      %td.actions
+        #{link_to 'View', [:admin, enrollment]}
+        | #{link_to 'Edit', [:edit, :admin, enrollment]}
+        | #{button_to 'Remove', [:admin, enrollment], :confirm => 'Are you sure?', :method => :delete, :class => 'action-button'}
+
+.actions= link_to 'New Enrollment', new_admin_enrollment_path

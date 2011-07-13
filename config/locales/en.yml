@@ -1,5 +1,14 @@
-# Sample localization file for English. Add more files in this directory for other locales.
-# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
-
 en:
-  hello: "Hello world"
+  simple_form:
+    labels:
+      enrollment:
+        delivery_method: Delivery Method
+        first_name: First Name
+        last_name: Last Name
+        phone_number: Phone Number
+        preferred_time: Preferred Time
+        stream_start: Stream Start
+    hints:
+      enrollment:
+        phone_number: Include country prefix
+        preferred_time: "Hour Range: 12-20, 9-13"
