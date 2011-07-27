@@ -1,0 +1,24 @@
+# Default settings for connecting to hub.  You can override settings for one
+# or more environments by creating a config/priv/hub_api.yml file following
+# the same format as this file.
+
+development:
+  api_base: http://apidev:apidevpwd@localhost:3000/api
+  sync_audit_log: log/hub_sync_dev.log # defaults to environment's log level
+  push_audit_log: log/hub_push_dev.log
+  pull_audit_log: log/hub_pull_dev.log
+
+test:
+  api_base: http://apitest:apitestpwd@localhost:3000/api
+
+production:
+  # set api_base in priv/hub_api.yml
+  #api_base: http://apidev:apidevpwd@localhost:3000/api
+  #sync_audit_log: log/hub_sync_dev.log:WARN
+  #push_audit_log: log/hub_push_dev.log:WARN
+  #pull_audit_log: log/hub_pull_dev.log:WARN
+
+
+<% file = Rails.root.join('config', 'priv', 'hub_api.yml') %>
+<%= file.read if file.exist? %>
+
