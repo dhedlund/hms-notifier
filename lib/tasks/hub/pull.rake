@@ -3,11 +3,6 @@ require 'hub-api'
 namespace :hub do
   desc "Pull notification responses from hub"
   task :pull => :environment do
-    # FIXME: Figure out why we need to load another model before trying to load Enrollment
-    # or Notification. This appears to be related to the use of observers against the
-    # Enrollment and Notification models.
-    NotificationObserver
-
     api_base = ENV['HUB_API_BASE']
     raise "HUB_API_BASE environment variable must be defined" unless api_base
 

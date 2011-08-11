@@ -41,3 +41,6 @@ module HmsNotifier
     config.filter_parameters += [:password]
   end
 end
+
+# observers don't load automatically in rake tasks, makes behavior more consistent
+ActiveRecord::Base.instantiate_observers
