@@ -31,8 +31,8 @@ namespace :hub do
         response = notification.responses.build(
           :status       => nr['status'],
           :delivered_at => nr['delivered_at'],
-          :error_type   => nr['error'] ? n['error']['type'] : nil,
-          :error_msg    => nr['error'] ? n['error']['message'] : nil
+          :error_type   => nr['error'] ? nr['error']['type'] : nil,
+          :error_msg    => nr['error'] ? nr['error']['message'] : nil
         )
         logger.debug "NOTIFICATION RESPONSE: #{response.attributes.inspect}"
         logger.error "ERRORS: #{response.errors.inspect}" if response.invalid?
