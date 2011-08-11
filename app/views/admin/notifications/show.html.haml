@@ -64,4 +64,4 @@
       %td= response.created_at.strftime '%Y-%m-%d'
       %td= response.status
       %td= response.error_type
-      %td #{link_to 'View', admin_notification_notification_response_path(@notification, response)}
+      %td.actions #{link_to 'View', admin_notification_notification_response_path(@notification, response)}
