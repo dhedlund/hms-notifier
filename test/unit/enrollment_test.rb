@@ -33,6 +33,10 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert Factory.build(:enrollment, :ext_user_id => nil).valid?
   end
 
+  test "should be valid without a language" do
+    assert Factory.build(:enrollment, :language => nil).valid?
+  end
+
   test "should be able to retrieve the created_at date" do
     @enrollment.save!
     assert_not_nil @enrollment.created_at
