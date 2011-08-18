@@ -17,6 +17,10 @@ class MessagesTest < ActiveSupport::TestCase
     assert Factory.build(:message, :title => nil).invalid?
   end
 
+  test "should be valid without a language" do
+    assert Factory.build(:message, :language => nil).valid?
+  end
+
   test "should be sorted by offset_days in ascending order" do
     s = Factory.create(:message_stream)
     [10,6,29,8,3].each do |offset|

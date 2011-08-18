@@ -23,7 +23,7 @@ namespace :hub do
     begin
       # TODO: deactivate any streams or messages no longer on hub (req. :deleted_at)
       STREAM_ATTS = %w{name title}
-      MESSAGE_ATTS = %w{name title offset_days sms_text}
+      MESSAGE_ATTS = %w{name title language offset_days sms_text}
       data.map {|v| v['message_stream']}.compact.each do |s|
         unless stream = MessageStream.find_by_name(s['name'])
           logger.info "creating message stream '#{s['name']}'..."
