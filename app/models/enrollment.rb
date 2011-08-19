@@ -18,7 +18,8 @@ class Enrollment < ActiveRecord::Base
   validates :stream_start, :presence => true
   validates :status, :inclusion => VALID_STATUSES
   validates :message_stream_id, :presence => true
-
+  validates :ext_user_id, :presence => true
+  
   scope :active, where(:status => ACTIVE)
   scope :completed, where(:status => COMPLETED)
   scope :cancelled, where(:status => CANCELLED)
@@ -57,13 +58,13 @@ class Enrollment < ActiveRecord::Base
   def prevent_duplicate_enrollments
     duplicates = Enrollment.where(
       :status => ACTIVE,
-      :phone_number => phone_number,
+      :ext_user_id => ext_user_id,
       :message_stream_id => message_stream_id
     )
     duplicates = duplicates.where('id != ?', id) if id
     return true if duplicates.none?
 
-    errors.add(:base, 'would create a duplicate active enrollment')
+    errors.add(:base, 'would create a duplicate active enrollment ')
     false
   end
 
