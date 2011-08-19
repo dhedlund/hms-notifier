@@ -29,9 +29,12 @@ class Enrollment < ActiveRecord::Base
 
   def ready_messages
     return [] unless active?
+    return [] unless ['SMS', 'IVR'].include?(delivery_method)
 
     offset_days = (Date.today - stream_start).to_i
-    possible = message_stream.messages.notifiable(offset_days)
+    possible = message_stream.messages.where(:language => language).notifiable(offset_days)
+    possible = possible.where("LENGTH(#{delivery_method == 'SMS' ? 'sms_text' : 'ivr_code'}) > 0")
+
     existing = notifications.map(&:message)
     possible - existing
   end
