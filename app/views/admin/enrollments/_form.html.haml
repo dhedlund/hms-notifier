@@ -4,7 +4,7 @@
   = f.input :phone_number
   = f.input :delivery_method, :collection => ['SMS', 'IVR'], :as => :radio
   = f.input :message_stream_id, :collection => MessageStream.all.map { |s| [s.title, s.id] }
-  = f.input :language, :collection => ['Default Language', 'English', 'Yao'], :include_blank => false
+  = f.input :language, :collection => Enrollment.supported_languages, :include_blank => false
   = f.input :stream_start, :as => :date
   = f.input :preferred_time
   = f.button :submit

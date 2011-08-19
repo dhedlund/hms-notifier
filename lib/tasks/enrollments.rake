@@ -69,7 +69,7 @@ namespace :enrollments do
     }
 
     lang_to_lang = {
-      "CHICHEWA" => "Default Language",
+      "CHICHEWA" => "Chichewa",
       "CHIYAO" => "Yao"
     } 
     message_type_to_delivery = {

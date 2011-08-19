@@ -70,6 +70,16 @@ class EnrollmentTest < ActiveSupport::TestCase
 
 
   #----------------------------------------------------------------------------#
+  # supported_languages:
+  #---------------------
+  test "supported_languages should return list of unique message languages" do
+    stream = @enrollment.message_stream
+    2.times { Factory.create(:message, :message_stream => stream, :language => 'English') }
+    Factory.create(:message, :message_stream => stream, :language => 'Spanish')
+    assert_equal ['English', 'Spanish'], Enrollment.supported_languages.sort
+  end
+
+  #----------------------------------------------------------------------------#
   # status:
   #--------
   test "status should default to 'ACTIVE'" do

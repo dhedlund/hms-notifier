@@ -52,6 +52,10 @@ class Enrollment < ActiveRecord::Base
     status == CANCELLED
   end
 
+  def self.supported_languages
+    Message.group(:language).map(&:language).sort
+  end
+
 
   protected
 
