@@ -3,6 +3,7 @@ require 'test_helper'
 class EnrollmentTest < ActiveSupport::TestCase
   setup do
     @enrollment = Factory.build(:enrollment)
+    @stream = @enrollment.message_stream
   end
 
   test "valid enrollment is valid" do
@@ -27,10 +28,6 @@ class EnrollmentTest < ActiveSupport::TestCase
 
   test "should be valid without a preferred time" do
     assert Factory.build(:enrollment, :preferred_time => nil).valid?
-  end
-
-  test "should be valid without an ext_user_id" do
-    assert Factory.build(:enrollment, :ext_user_id => nil).valid?
   end
 
   test "should be valid without a language" do
@@ -68,6 +65,25 @@ class EnrollmentTest < ActiveSupport::TestCase
     end
   end
 
+
+  #----------------------------------------------------------------------------#
+  # ext_user_id:
+  #-------------
+  test "should be valid without an ext_user_id" do
+    assert Factory.build(:enrollment, :ext_user_id => nil).valid?
+  end
+
+  test "should prevent two active enrollments w/ same ext_user_id & stream" do
+    Factory.create(:enrollment, :message_stream => @stream, :ext_user_id => 'foo')
+    e = Factory.build(:enrollment, :message_stream => @stream, :ext_user_id => 'foo')
+    assert e.invalid?
+    assert e.errors[:base].any?
+  end
+
+  test "should allow two active enrollments w/ same ext_user_id if diff streams" do
+    Factory.create(:enrollment, :ext_user_id => 'foo')
+    assert Factory.build(:enrollment, :ext_user_id => 'foo').valid?
+  end
 
   #----------------------------------------------------------------------------#
   # supported_languages:
