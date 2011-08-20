@@ -33,7 +33,7 @@ class Enrollment < ActiveRecord::Base
 
     offset_days = (Date.today - stream_start).to_i
     possible = message_stream.messages.where(:language => language).notifiable(offset_days)
-    possible = possible.where("LENGTH(#{delivery_method == 'SMS' ? 'sms_text' : 'ivr_code'}) > 0")
+    possible = possible.where("sms_text #{delivery_method == 'SMS' ? 'IS NOT' : 'IS'} NULL")
 
     existing = notifications.map(&:message)
     possible - existing
