@@ -1,0 +1,11 @@
+%tr{:class => cycle('even', 'odd')}
+  %td= enrollment.id
+  %td= enrollment.message_stream_id
+  %td= enrollment.phone_number
+  %td= enrollment.delivery_method
+  %td= enrollment.stream_start.strftime '%Y-%m-%d'
+  %td= enrollment.status
+  %td.actions
+    #{link_to 'View', [:admin, enrollment]}
+    | #{link_to 'Edit', [:edit, :admin, enrollment]}
+    | #{button_to 'Remove', [:admin, enrollment], :confirm => 'Are you sure?', :method => :delete, :class => 'action-button'}

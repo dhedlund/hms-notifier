@@ -2,7 +2,7 @@ body {
   background-color: #f4fad2;
   line-height: 1.4em;
   font-family: Arial;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 h1, h2 {
@@ -120,7 +120,7 @@ div.actions {
   color: #b40f0f;
   font-weight: bold;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 12px;
   cursor: pointer;
 }
 

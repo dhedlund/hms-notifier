@@ -1,8 +1,8 @@
 class Admin::EnrollmentsController < AdminController
-  respond_to :html, :json
+  respond_to :html, :json, :js
 
   def index
-    @enrollments = Enrollment.scoped
+    @enrollments = Enrollment.page(params[:page])
     respond_with :admin, @enrollments
   end
 

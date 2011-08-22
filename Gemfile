@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rails', '~>3.0'
+gem 'jquery-rails', '>= 0.2.6'
 
 gem 'mysql'
 gem 'haml'
@@ -9,6 +10,7 @@ gem 'rest-client'
 #temporary require to get fastercsv on hotline server while local.  may use in reporting rake later
 gem 'fastercsv'
 gem 'simple_form'
+gem 'kaminari'
 
 group :development, :test do
   gem 'sqlite3'

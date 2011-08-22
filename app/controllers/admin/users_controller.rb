@@ -1,8 +1,8 @@
 class Admin::UsersController < AdminController
-  respond_to :html, :json
+  respond_to :html, :json, :js
 
   def index
-    @users = User.scoped
+    @users = User.page(params[:page])
     respond_with @users do |format|
       format.json { render :json => @users, :except => 'password' }
     end

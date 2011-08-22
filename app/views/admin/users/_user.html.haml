@@ -1,0 +1,4 @@
+%tr{:class => cycle('even', 'odd')}
+  %td= user.username
+  %td= user.timezone
+  %td.actions #{link_to 'View', [:admin, user]}
