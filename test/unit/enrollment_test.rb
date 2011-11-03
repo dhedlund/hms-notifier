@@ -14,8 +14,8 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert Factory.build(:enrollment, :first_name => nil).invalid?
   end
 
-  test "should be invalid without a last_name" do
-    assert Factory.build(:enrollment, :last_name => nil).invalid?
+  test "should be valid without a last_name" do
+    assert Factory.build(:enrollment, :last_name => nil).valid?
   end
 
   test "should be invalid without a delivery_method" do
