@@ -70,7 +70,7 @@ namespace :enrollments do
 
     lang_to_lang = {
       "CHICHEWA" => "Chichewa",
-      "CHIYAO" => "Yao"
+      "CHIYAO" => "Chiyao"
     } 
     message_type_to_delivery = {
       "SMS" => "SMS",
@@ -99,18 +99,26 @@ namespace :enrollments do
 
       encounter_data = encounters.last.obs_hash
 
-      phone = (encounter_data["PHONE NUMBER"] || encounter_data["TELEPHONE NUMBER"]).gsub(" ","")
+      phone = (encounter_data["PHONE NUMBER"] || encounter_data["TELEPHONE NUMBER"]).to_s.gsub(" ","")
+      phone.sub!(/^0/, '265')
+
       person_log_summary = "#{first_name} #{last_name} #{phone} #{ext_user_id} (#{patient_id})"
 
       puts "#{person_log_summary}"
       puts "     #{encounters.size} total, last #{encounters.last.date_created}  #{encounters.last.encounter_id}: #{encounter_data.inspect}"
 
       next unless encounter_data["ON TIPS AND REMINDERS PROGRAM"] == "YES"
+      next if !phone.present? || phone == 'UNKNOWN'
 
       #all further 'next' skips are unexpected and should be logged as warnings
       #the intent is to catch holes in mnch-hotline's minimal enrollment validation logic. 
       skip_text = "Enrollment skipped for #{person_log_summary}:\n      "
 
+
+      unless !phone_number.present? || phone =~ /UNKNOWN/i
+        puts "Unsupported phone number #{phone_number} for #{person_log_summary}"
+        next
+      end
 
       unless stream_name = content_type_to_stream[encounter_data["TYPE OF MESSAGE CONTENT"]]
         puts "Unsupported message type #{encounter_data["TYPE OF MESSAGE CONTENT"]} for #{person_log_summary}"
@@ -134,7 +142,7 @@ namespace :enrollments do
           #{pg_status_encounter.encounter_id}, #{pg_status_encounter.obs_hash.inspect}"
           next
         end
-        stream_start = Date.parse(due_date_text)
+        stream_start = Date.parse(due_date_text) - 40.weeks
       end
 
       #community phones disallowed from voice delivery
@@ -161,9 +169,7 @@ namespace :enrollments do
         :message_stream_id => stream.id,
         :language => language,
         :delivery_method => delivery_method,
-        #          :stream_start => stream_start,
-        # stream start for daily test streams
-        :stream_start => Date.today - 1.day,
+        :stream_start => stream_start,
 
         :ext_user_id => ext_user_id,
         :status => "ACTIVE"
