@@ -9,13 +9,17 @@
 # populates message_streams
 Dir[File.expand_path('../seed_data/message_streams/*.yml', __FILE__)].each do |file|
   data = YAML.load_file(file)
-  stream = MessageStream.create!(:name => data['name'], :title => data['title'])
+  stream = MessageStream.new(:name => data['name'], :title => data['title'])
+  unless stream.save
+    puts "#{stream.name}: not saved, validation errors."
+    stream.save!
+  end
   data['messages'].each do |data|
-    message = Message.create!(
-      :message_stream_id => stream.id,
-      :name => data['name'],
-      :title => data['title'],
-      :offset_days => data['offset_days']
-    )
+    data['sms_text'].strip! if data['sms_text']
+    message = stream.messages.build(data)
+    unless message.save
+      puts "#{message.path}: not saved, validation errors."
+      message.save!
+    end
   end
 end
