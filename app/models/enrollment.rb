@@ -11,6 +11,8 @@ class Enrollment < ActiveRecord::Base
   CANCELLED = 'CANCELLED'
   VALID_STATUSES = [ ACTIVE, COMPLETED, CANCELLED ]
 
+  serialize :variables, Hash
+
   validates :first_name, :presence => true
   validates :phone_number, :presence => true
   validates :delivery_method, :presence => true
@@ -52,6 +54,10 @@ class Enrollment < ActiveRecord::Base
 
   def self.supported_languages
     Message.group(:language).map(&:language).sort
+  end
+
+  def variables
+    self[:variables] || {}
   end
 
 

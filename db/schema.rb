@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110818233930) do
+ActiveRecord::Schema.define(:version => 20111103145744) do
 
   create_table "enrollments", :force => true do |t|
     t.string   "first_name"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(:version => 20110818233930) do
     t.string   "ext_user_id"
     t.string   "status"
     t.string   "language"
+    t.text     "variables"
   end
 
   add_index "enrollments", ["message_stream_id"], :name => "index_enrollments_on_message_stream_id"

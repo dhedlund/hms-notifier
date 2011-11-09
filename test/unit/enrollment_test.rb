@@ -357,4 +357,17 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert_equal Enrollment::CANCELLED, cancelled_enrollments[0].status
   end
 
+  #----------------------------------------------------------------------------#
+  # variables:
+  #-----------
+  test "should be valid without variables" do
+    @enrollment.variables = {}
+    assert @enrollment.valid?
+  end
+
+  test "should return an empty hash by default" do
+    @enrollment.variables = {}
+    assert_equal({}, @enrollment.variables)
+  end
+
 end
