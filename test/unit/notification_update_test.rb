@@ -187,4 +187,17 @@ class NotificationUpdateTest < ActiveSupport::TestCase
     assert_equal 2, NotificationUpdate.pending.count
   end
 
+  #----------------------------------------------------------------------------#
+  # variables:
+  #-----------
+  test "should be valid without variables" do
+    update = Factory.build(:notification_update, :variables => nil)
+    assert update.valid?
+  end
+
+  test "should return an empty hash by default" do
+    update = Factory.build(:notification_update, :variables => nil)
+    assert_equal({}, update.variables)
+  end
+
 end

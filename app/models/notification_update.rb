@@ -6,6 +6,8 @@ class NotificationUpdate < ActiveRecord::Base
   CANCEL = 'CANCEL'
   VALID_ACTIONS = [ CREATE, UPDATE, CANCEL ]
 
+  serialize :variables, Hash
+
   validates :notification_id, :presence => true
   validates :action, :inclusion => VALID_ACTIONS
   validates :first_name, :presence => true
@@ -22,6 +24,10 @@ class NotificationUpdate < ActiveRecord::Base
     self.cache_notification_data
   end
 
+  def variables
+    self[:variables] || {}
+  end
+
 
   protected
 
@@ -34,6 +40,7 @@ class NotificationUpdate < ActiveRecord::Base
     self.preferred_time = enrollment.try(:preferred_time)
     self.delivery_method = enrollment.try(:delivery_method)
     self.ext_user_id = enrollment.try(:ext_user_id)
+    self.variables = enrollment.try(:variables)
 
     message = notification.try(:message)
     self.message_path = message.try(:path)
