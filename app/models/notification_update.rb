@@ -45,6 +45,10 @@ class NotificationUpdate < ActiveRecord::Base
     message = notification.try(:message)
     self.message_path = message.try(:path)
 
+    if expire_days = message.try(:expire_days)
+      self.delivery_expires = self.delivery_date + expire_days.days
+    end
+
     self.action = CANCEL if notification.try(:status) == Notification::CANCELLED
   end
 

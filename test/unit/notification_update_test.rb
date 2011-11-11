@@ -144,6 +144,14 @@ class NotificationUpdateTest < ActiveSupport::TestCase
     assert_not_nil update.delivery_date
   end
 
+  test "assigning a notification w/ message w/ custom expire_days" do
+    message = Factory.create(:message, :expire_days => 3)
+    notification = Factory.create(:notification, :message => message)
+    update = Factory.build(:notification_update, :notification => nil)
+    update.notification = notification
+    assert_equal update.delivery_date + 3.days, update.delivery_expires
+  end
+
   test "assigning a notification should set preferred_time" do
     enrollment = Factory.create(:enrollment, :preferred_time => '10-19')
     notification = Factory.create(:notification, :enrollment => enrollment)
