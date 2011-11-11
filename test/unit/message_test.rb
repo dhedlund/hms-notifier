@@ -30,6 +30,19 @@ class MessagesTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # expire_days:
+  #-------------
+  test "should be valid without an expire_days" do
+    message = Factory.build(:message, :expire_days => nil)
+    assert message.valid?
+  end
+
+  test "should be able to assign an integer to expire_days" do
+    message = Factory.build(:message, :expire_days => 5)
+    assert_equal 5, message.expire_days
+  end
+
+  #----------------------------------------------------------------------------#
   # offset_days:
   #-------------
   test "should be invalid without an offset" do

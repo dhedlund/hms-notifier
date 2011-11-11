@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111103150343) do
+ActiveRecord::Schema.define(:version => 20111103151858) do
 
   create_table "enrollments", :force => true do |t|
     t.string   "first_name"
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(:version => 20111103150343) do
     t.datetime "updated_at"
     t.string   "sms_text"
     t.string   "language"
+    t.integer  "expire_days"
   end
 
   add_index "messages", ["message_stream_id", "name"], :name => "index_messages_on_message_stream_id_and_name", :unique => true
