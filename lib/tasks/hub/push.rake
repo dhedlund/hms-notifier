@@ -33,6 +33,7 @@ namespace :hub do
             'delivery_date'    => u.delivery_date.strftime('%Y-%m-%d'),
             'delivery_expires' => u.delivery_expires.try(:strftime, '%Y-%m-%d'),
             'preferred_time'   => u.preferred_time,
+            'variables'        => u.variables,
           }
         }
       rescue => e

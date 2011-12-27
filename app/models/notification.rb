@@ -19,6 +19,8 @@ class Notification < ActiveRecord::Base
   INACTIVE_STATUSES = [ PERM_FAIL, DELIVERED, CANCELLED ]
   VALID_STATUSES = [ ACTIVE_STATUSES, INACTIVE_STATUSES ].flatten
 
+  serialize :variables, Hash
+
   validates :uuid, :uniqueness => true
   validates :enrollment_id, :presence => true
   validates :message_id, :presence => true, :uniqueness => { :scope => :enrollment_id }
@@ -41,6 +43,10 @@ class Notification < ActiveRecord::Base
 
   def cancelled?
     status == CANCELLED
+  end
+
+  def variables
+    self[:variables] || {}
   end
 
 

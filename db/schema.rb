@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111103151858) do
+ActiveRecord::Schema.define(:version => 20111103171516) do
 
   create_table "enrollments", :force => true do |t|
     t.string   "first_name"
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(:version => 20111103151858) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "variables"
   end
 
   add_index "notifications", ["enrollment_id", "message_id"], :name => "index_notifications_on_enrollment_id_and_message_id", :unique => true

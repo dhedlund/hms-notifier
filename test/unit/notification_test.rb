@@ -219,4 +219,17 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal Notification::ACTIVE_STATUSES.sort, active_notifications.map(&:status).sort
   end
 
+  #----------------------------------------------------------------------------#
+  # variables:
+  #-----------
+  test "should be valid without variables" do
+    notification = Factory.build(:notification, :variables => nil)
+    assert @notification.valid?
+  end
+
+  test "should return an empty hash by default" do
+    notification = Factory.build(:notification, :variables => nil)
+    assert_equal({}, notification.variables)
+  end
+
 end
