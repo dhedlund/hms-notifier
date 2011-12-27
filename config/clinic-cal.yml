@@ -1,0 +1,13 @@
+# Default settings for connecting to hub.  You can override settings for one
+# or more environments by creating a config/priv/hub_api.yml file following
+# the same format as this file.
+
+development:
+  username: calendaruser
+  password: calendarpassword
+  calendars: ["Calendar 1", "Calendar 2"]
+  message_stream: clinic-cal-reminders
+  default_language: English
+
+<% file = Rails.root.join('config', 'priv', 'clinic-cal.yml') %>
+<%= file.read if file.exist? %>

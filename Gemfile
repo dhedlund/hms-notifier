@@ -11,6 +11,7 @@ gem 'rest-client'
 gem 'fastercsv'
 gem 'simple_form'
 gem 'kaminari'
+gem 'gcal4ruby'
 
 group :development, :test do
   gem 'sqlite3'
