@@ -25,8 +25,11 @@ namespace :report do
 #    puts
 
     columns = [ 'First name', 'Last name','Phone number','Phone number length', 'language','id','External user id', 
-	'status', 'Method', 'Message stream','old status','new status','Notifications count',
-	'New count','Delivered count', 'Temp Fail count','Perm Fail count','Cancelled count',
+	'status', 'Method', 'Message stream','old status','new status',
+	'Older Notifications count','Older New count','Older Delivered count',
+	'Older Notifications count','Older New count','Older Delivered count',
+	'Newer Temp Fail count','Newer Perm Fail count','Newer Cancelled count',
+	'Newer Temp Fail count','Newer Perm Fail count','Newer Cancelled count',
 	'tail fails' ]
     puts CSV.generate_line([ *columns ])
     Enrollment.where(:status => statuses).each do |enrollment|
@@ -57,19 +60,29 @@ namespace :report do
       #print newer.map {|n| STATUS_LEGEND[n.status] }
       new = newer.map {|n| STATUS_LEGEND[n.status] }
       #print ' ]'
-      notifications_count = notifications.count
-      new_count = notifications.where(:status => 'NEW').count
-      delivered_count = notifications.where(:status => 'DELIVERED').count
-      temp_fail_count = notifications.where(:status => 'TEMP_FAIL').count
-      perm_fail_count = notifications.where(:status => 'PERM_FAIL').count
-      cancelled_count = notifications.where(:status => 'CANCELLED').count
+      older_notifications_count = older.count
+      older_new_count = older.where(:status => 'NEW').count
+      older_delivered_count = older.where(:status => 'DELIVERED').count
+      older_temp_fail_count = older.where(:status => 'TEMP_FAIL').count
+      older_perm_fail_count = older.where(:status => 'PERM_FAIL').count
+      older_cancelled_count = older.where(:status => 'CANCELLED').count
+      newer_notifications_count = newer.count
+      newer_new_count = newer.where(:status => 'NEW').count
+      newer_delivered_count = newer.where(:status => 'DELIVERED').count
+      newer_temp_fail_count = newer.where(:status => 'TEMP_FAIL').count
+      newer_perm_fail_count = newer.where(:status => 'PERM_FAIL').count
+      newer_cancelled_count = newer.where(:status => 'CANCELLED').count
       tail_fails = notifications.where(:status => Notification::INACTIVE_STATUSES).reverse \
         .take_while {|n| n.status == Notification::PERM_FAIL}
       #print " (#{tail_fails.length})"      
       tail = "#{tail_fails.length}"      
       puts CSV.generate_line([first_name,last_name,phone_number,phone_number_length,
-	language,id,extid,method,stat,stream,old,new,notifications_count,new_count,
-	delivered_count,temp_fail_count,perm_fail_count,cancelled_count,tail])
+	language,id,extid,method,stat,stream,old,new,
+	older_notifications_count,older_new_count,older_delivered_count,
+	older_temp_fail_count,older_perm_fail_count,older_cancelled_count,
+	newer_notifications_count,newer_new_count,newer_delivered_count,
+	newer_temp_fail_count,newer_perm_fail_count,newer_cancelled_count,
+	tail])
     end
   end
 end
