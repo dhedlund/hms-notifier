@@ -74,7 +74,7 @@ namespace :report do
         .take_while {|n| n.status == Notification::PERM_FAIL}
       tail = "#{tail_fails.length}"      
       puts CSV.generate_line([first_name,last_name,phone_number,phone_number_length,
-	language,id,extid,delivery_method,stat,stream,old,new,
+	language,id,extid,stat,delivery_method,stream,old,new,
 	older_notifications_count,older_new_count,older_delivered_count,
 	older_temp_fail_count,older_perm_fail_count,older_cancelled_count,
 	newer_notifications_count,newer_new_count,newer_delivered_count,
