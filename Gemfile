@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'rails', '~>3.0'
 gem 'jquery-rails', '>= 0.2.6'
 
-gem 'mysql'
+gem 'mysql2', '< 0.3'
 gem 'haml'
 gem 'uuid'
 gem 'rest-client'
