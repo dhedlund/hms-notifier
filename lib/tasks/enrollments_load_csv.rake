@@ -3,11 +3,9 @@ require 'csv'
 namespace :enrollments do
   desc "Load enrollments from hotline csv export"  
   task :load_csv => :environment do
+    enrollment_ids_to_cancel = Enrollment.active.map(&:id)
     CSV.open("/vagrant/csv/individual_current_enrollments.csv", 'r') do |row|
       next unless row[2] # skipping date range header
-#      print "First_name: #{row[0]}, Last_name: #{row[1]}, National_id: #{row[2]}, IVR_id: #{row[3]}," +
-#        "Tips: #{row[4]}, Phone_type: #{row[5]}, Phone_number: #{row[6]}, Language: #{row[7]}, " + 
-#        "Message_Type: #{row[8]}, Content: #{row[9]},Relevant_Date: #{row[10]}\n"
       first_name = row[0]
       last_name = row[1]
       national_id = row[2]
@@ -23,10 +21,9 @@ namespace :enrollments do
       ext_user_id = "#{ivr_id}/#{national_id}"
       person_log_summary = "#{first_name} #{last_name} #{phone} #{ext_user_id}"
 
-#      puts "#{person_log_summary}"
-#      puts "     #{encounters.size} total, last #{encounters.last.date_created}  #{encounters.last.encounter_id}: #{encounter_data.inspect}"
+      #puts "#{person_log_summary}"
+      #puts "     #{encounters.size} total, last #{encounters.last.date_created}  #{encounters.last.encounter_id}: #{encounter_data.inspect}"
 
-      enrollment_ids_to_cancel = Enrollment.active.map(&:id)
 
       content_type_to_stream = {
         "Child" => "child",
@@ -70,16 +67,10 @@ namespace :enrollments do
       if stream_name=="Child"
         stream_start = relevant_date
       elsif stream_name=="Pregnancy"
-#        pg_status_encounter = Encounter.pg_status.where(:patient_id=>patient_id).order("date_created DESC").first 
-#        if pg_status_encounter.nil?
-#          puts "#{skip_text} Pregnancy enrollment without pregancy status encounter"
-#          next
-#        end
-        # curiously, EDD is stored as value_text, and has two possible names
+        #curiously, EDD is stored as value_text, and has two possible names
         due_date_text = relevant_date
         if due_date_text.nil? || due_date_text == '--'
           puts "#{skip_text} Pregnancy enrollment with pregnancy status encounter but without EDD "
-#         " #{pg_status_encounter.encounter_id}, #{pg_status_encounter.obs_hash.inspect}"
           next
         end
         stream_start = Date.parse(due_date_text) - 40.weeks
@@ -114,9 +105,11 @@ namespace :enrollments do
         :ext_user_id => ext_user_id,
         :status => "ACTIVE"
       }
-      #puts enrollment.inspect
-      enrollment.save!  if ENV['HMS_SAVE_ENROLLMENTS']
-
+      puts enrollment.inspect
+      if ENV['HMS_SAVE_ENROLLMENTS']
+        puts "saving enrollment"
+        enrollment.save!
+      end
     end
 
     if ENV['HMS_SAVE_ENROLLMENTS']
