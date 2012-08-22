@@ -2,9 +2,9 @@ require 'csv'
 
 namespace :enrollments do
   desc "Load enrollments from hotline csv export"  
-  task :load_csv => :environment do
+  task :load_csv, [:file_location] => :environment do |t,args|
     enrollment_ids_to_cancel = Enrollment.active.map(&:id)
-    CSV.open("/vagrant/csv/individual_current_enrollments.csv", 'r') do |row|
+    CSV.open(args[:file_location], 'r') do |row|
       next unless row[2] # skipping date range header
       first_name = row[0]
       last_name = row[1]
