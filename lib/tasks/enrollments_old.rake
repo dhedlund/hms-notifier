@@ -1,5 +1,5 @@
 
-namespace :enrollments do
+namespace :enrollments_old do
   desc "test enrollments query"  
   task :query => :environment do
     logger = RAILS_DEFAULT_LOGGER
@@ -64,22 +64,16 @@ namespace :enrollments do
     end
 
     content_type_to_stream = {
-      "Child" => "child",
       "CHILD" => "child",
-      "Pregnancy" => "pregnancy",
       "PREGNANCY" => "pregnancy"
     }
 
     lang_to_lang = {
-      "Chichewa" => "Chichewa",
       "CHICHEWA" => "Chichewa",
-      "Chiyao" => "Chiyao",
       "CHIYAO" => "Chiyao"
     } 
     message_type_to_delivery = {
-      "SEND SMS" => "SMS",
       "SMS" => "SMS",
-      "Voice" => "IVR",
       "VOICE" => "IVR"
     }
 
@@ -95,15 +89,15 @@ namespace :enrollments do
       first_name = patient_name.given_name
       last_name = patient_name.family_name
 
-      encounter_data = encounters.last.obs_hash
-
       national_id = Patient.find_by_sql("SELECT identifier FROM patient_identifier 
       WHERE patient_id = #{patient_id} AND identifier_type = #{national_id_type_id}").first.identifier
       ivr_id = Patient.find_by_sql("SELECT identifier FROM patient_identifier 
       WHERE patient_id = #{patient_id} AND identifier_type = #{ivr_id_type_id}").first.identifier
       ext_user_id = "#{ivr_id}/#{national_id}"
 
-      phone = (encounter_data["Phone number"] || encounter_data["Telephone number"] || encounter_data["PHONE NUMBER"] || encounter_data["TELEPHONE NUMBER"]).to_s.gsub(" ","")
+      encounter_data = encounters.last.obs_hash
+
+      phone = (encounter_data["PHONE NUMBER"] || encounter_data["TELEPHONE NUMBER"]).to_s.gsub(" ","")
       phone.sub!(/^0/, '265')
 
       person_log_summary = "#{first_name} #{last_name} #{phone} #{ext_user_id} (#{patient_id})"
@@ -111,16 +105,16 @@ namespace :enrollments do
       warn "#{person_log_summary}"
       warn "     #{encounters.size} total, last #{encounters.last.date_created}  #{encounters.last.encounter_id}: #{encounter_data.inspect}"
 
-      next if encounter_data["On tips and reminders program"] != "Yes" && encounter_data["ON TIPS AND REMINDERS PROGRAM"] != "YES"
-      next if !phone.present? || phone =~ /^UNKNOWN$/i
+      next unless encounter_data["ON TIPS AND REMINDERS PROGRAM"] == "YES"
+      next if !phone.present? || phone == 'UNKNOWN'
 
       #all further 'next' skips are unexpected and should be logged as warnings
       #the intent is to catch holes in mnch-hotline's minimal enrollment validation logic. 
       skip_text = "Enrollment skipped for #{person_log_summary}:\n      "
 
 
-      unless stream_name = content_type_to_stream[encounter_data["Type of message content"]] || content_type_to_stream[encounter_data["TYPE OF MESSAGE CONTENT"]]
-        warn "Unsupported message type #{encounter_data["Type of message content"]||encounter_data["TYPE OF MESSAGE CONTENT"]} for #{person_log_summary}"
+      unless stream_name = content_type_to_stream[encounter_data["TYPE OF MESSAGE CONTENT"]]
+        warn "Unsupported message type #{encounter_data["TYPE OF MESSAGE CONTENT"]} for #{person_log_summary}"
         next
       end
 
@@ -135,7 +129,7 @@ namespace :enrollments do
           next
         end
         # curiously, EDD is stored as value_text, and has two possible names
-        due_date_text = pg_status_encounter.obs_hash["Pregnancy due date"] || pg_status_encounter.obs_hash["Expected due date"] || pg_status_encounter.obs_hash["PREGNANCY DUE DATE"] || pg_status_encounter.obs_hash["EXPECTED DUE DATE"]
+        due_date_text = pg_status_encounter.obs_hash["PREGNANCY DUE DATE"] || pg_status_encounter.obs_hash["EXPECTED DUE DATE"]
         if due_date_text.nil?
           warn "#{skip_text} Pregnancy enrollment with pregnancy status encounter but without EDD 
           #{pg_status_encounter.encounter_id}, #{pg_status_encounter.obs_hash.inspect}"
@@ -146,13 +140,13 @@ namespace :enrollments do
       end
 
       #community phones disallowed from voice delivery
-      if (encounter_data["Telephone number type"] == "Community phone" && encounter_data["Type of message"] == "Voice") || (encounter_data["TELEPHONE NUMBER TYPE "] == "COMMUNITY PHONE" && encounter_data["TYPE OF MESSAGE"] == "VOICE")
+      if encounter_data["TELEPHONE NUMBER TYPE "] == "COMMUNITY PHONE" && encounter_data["TYPE OF MESSAGE"] == "VOICE" 
         warn "#{skip_text} Voice enrollment for community phone"
         next
       end
 
-      raise "Unknown language #{encounter_data["Language preference"]||encounter_data["LANGUAGE PREFERENCE"]}" unless language = lang_to_lang[encounter_data["Language preference"]] || lang_to_lang[encounter_data["LANGUAGE PREFERENCE"]]
-      raise "Unknown delivery type #{encounter_data["Type of message"]||encounter_data["TYPE OF MESSAGE"]}" unless delivery_method = message_type_to_delivery[encounter_data["Type of message"]] || message_type_to_delivery[encounter_data["TYPE OF MESSAGE"]]
+      raise "Unknown language #{encounter_data["LANGUAGE PREFERENCE"]}" unless language = lang_to_lang[encounter_data["LANGUAGE PREFERENCE"]]
+      raise "Unknown delivery type #{encounter_data["TYPE OF MESSAGE"]}" unless delivery_method = message_type_to_delivery[encounter_data["TYPE OF MESSAGE"]]
 
 
 
