@@ -6,6 +6,8 @@ namespace :enrollments do
     enrollment_ids_to_cancel = Enrollment.active.map(&:id)
     CSV.open(args[:file_location], 'r') do |row|
       next unless row[2] # skipping date range header
+      row.map! { |s| s.to_s } # remove CSV::Cell wrappers
+
       first_name = row[0]
       last_name = row[1]
       national_id = row[2]
@@ -20,9 +22,6 @@ namespace :enrollments do
       phone = phone.to_s.gsub(/\s+/, '').sub(/^0/, '265')
       ext_user_id = "#{ivr_id}/#{national_id}"
       person_log_summary = "#{first_name} #{last_name} #{phone} #{ext_user_id}"
-
-      #puts "#{person_log_summary}"
-      #puts "     #{encounters.size} total, last #{encounters.last.date_created}  #{encounters.last.encounter_id}: #{encounter_data.inspect}"
 
 
       content_type_to_stream = {
@@ -48,29 +47,29 @@ namespace :enrollments do
 
 
       if !phone.present? || phone == "--"
-        puts "Unsupported phone number \"#{phone}\". #{skip_text}"
+        warn "Unsupported phone number \"#{phone}\". #{skip_text}"
         next
       end
 
       unless (stream_name == "Pregnancy" || stream_name == "Child")
-        puts "Unsupported message type \"#{stream_name}\". #{skip_text}"
+        warn "Unsupported message type \"#{stream_name}\". #{skip_text}"
         next
       end
 
       unless relevant_date =~ /\d{4}-\d{2}-\d{2}/
-        puts "Unsupported date format \"#{relevant_date}\". #{skip_text}"
+        warn "Unsupported date format \"#{relevant_date}\". #{skip_text}"
         next
       end
 
       stream = MessageStream.find_by_name(stream_name.downcase) 
       raise "stream not found for name #{stream_name}" if stream.nil?
       if stream_name=="Child"
-        stream_start = relevant_date
+        stream_start = Date.parse(relevant_date)
       elsif stream_name=="Pregnancy"
         #curiously, EDD is stored as value_text, and has two possible names
         due_date_text = relevant_date
         if due_date_text.nil? || due_date_text == '--'
-          puts "#{skip_text} Pregnancy enrollment with pregnancy status encounter but without EDD "
+          warn "#{skip_text} Pregnancy enrollment with pregnancy status encounter but without EDD "
           next
         end
         stream_start = Date.parse(due_date_text) - 40.weeks
@@ -78,7 +77,7 @@ namespace :enrollments do
 
       #community phones disallowed from voice delivery
       if phone_type == "Community phone" && message_type == "Voice" 
-        puts "Voice enrollment for community phone. #{skip_text}"
+        warn "Voice enrollment for community phone. #{skip_text}"
         next
       end
 
@@ -93,22 +92,24 @@ namespace :enrollments do
         enrollment = Enrollment.new
       end
 
-      enrollment.attributes = {
-        :first_name => first_name,
-        :last_name => last_name,
-        :phone_number => phone,
-        :message_stream_id => stream.id,
-        :language => language,
-        :delivery_method => delivery_method,
-        :stream_start => stream_start,
+      attributes = {
+        'first_name' => first_name,
+        'last_name' => last_name,
+        'phone_number' => phone,
+        'message_stream_id' => stream.id,
+        'language' => language,
+        'delivery_method' => delivery_method,
+        'stream_start' => stream_start,
 
-        :ext_user_id => ext_user_id,
-        :status => "ACTIVE"
+        'ext_user_id' => ext_user_id,
+        'status' => "ACTIVE"
       }
-      puts enrollment.inspect
+      enrollment.attributes = attributes
+
       if ENV['HMS_SAVE_ENROLLMENTS']
-        puts "saving enrollment"
         enrollment.save!
+      else
+        puts ActiveSupport::OrderedHash[*attributes.sort.flatten].to_yaml
       end
     end
 
