@@ -3,9 +3,9 @@
 %html
   %head
     %title HMS Notifier
-    = stylesheet_link_tag 'reset'
     = javascript_include_tag :defaults
     = yield :stylesheets
+    = yield :javascripts
 
   %body
     - if content_for?(:content)
