@@ -1,5 +1,7 @@
-Factory.define :notification_update do |f|
-  f.action         'CREATE'
+FactoryGirl.define do
+  factory :notification_update do
+    action 'CREATE'
 
-  f.association :notification
+    notification
+  end
 end

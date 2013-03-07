@@ -1,5 +1,7 @@
-Factory.define :notification_response do |f|
-  f.status 'DELIVERED'
+FactoryGirl.define do
+  factory :notification_response do
+    status 'DELIVERED'
 
-  f.association :notification
+    notification
+  end
 end

@@ -2,11 +2,11 @@ require 'test_helper'
 
 class Admin::EnrollmentsControllerTest < ActionController::TestCase
   setup do
-    @user = Factory.create(:user)
+    @user = FactoryGirl.create(:user)
     creds = encode_credentials(@user.username, @user.password)
     @request.env['HTTP_AUTHORIZATION'] = creds
 
-    @enrollment = Factory.build(:enrollment)
+    @enrollment = FactoryGirl.build(:enrollment)
   end
 
   test "accessing controller w/o creds should give 401 unauthorized" do
@@ -22,7 +22,7 @@ class Admin::EnrollmentsControllerTest < ActionController::TestCase
   end
 
   test "index should return a list of enrollments (JSON)" do
-    4.times { Factory.create(:enrollment) }
+    4.times { FactoryGirl.create(:enrollment) }
 
     get :index, :format => :json
     assert_response :success

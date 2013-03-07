@@ -1,8 +1,10 @@
-Factory.define :enrollment do |f|
-  f.first_name 'First'
-  f.sequence(:phone_number) { |n| "+01234-5678-#{n}" }
-  f.delivery_method 'SMS'
-  f.stream_start Date.today
+FactoryGirl.define do
+  factory :enrollment do
+    first_name 'First'
+    sequence(:phone_number) { |n| "+01234-5678-#{n}" }
+    delivery_method 'SMS'
+    stream_start Date.today
 
-  f.association :message_stream
+    message_stream
+  end
 end

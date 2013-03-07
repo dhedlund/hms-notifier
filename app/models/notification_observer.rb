@@ -14,7 +14,7 @@ class NotificationObserver < ActiveRecord::Observer
     notifications.select { |n| n.active? || n.cancelled? }.each do |notification|
       action = NotificationUpdate::CANCEL if notification.cancelled?
 
-      update = notification.updates.last.try(:clone) || NotificationUpdate.new
+      update = notification.updates.last.try(:dup) || NotificationUpdate.new
       next if update.action == NotificationUpdate::CANCEL
 
       update.changed_attributes.clear

@@ -1,8 +1,10 @@
-Factory.define :message do |f|
-  f.sequence(:name) { |n| "message#{n}" }
-  f.title 'message title'
-  f.offset_days 0
-  f.sms_text 'whyamihere'
+FactoryGirl.define do
+  factory :message do
+    sequence(:name) { |n| "message#{n}" }
+    title 'message title'
+    offset_days 0
+    sms_text 'whyamihere'
 
-  f.association :message_stream
+    message_stream
+  end
 end

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class AdminControllerTest < ActionController::TestCase
   setup do
-    @user = Factory.create(:user)
+    @user = FactoryGirl.create(:user)
     @valid_creds = encode_credentials(@user.username, @user.password)
     @request.env['HTTP_AUTHORIZATION'] = @valid_creds
   end

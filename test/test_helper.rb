@@ -11,7 +11,7 @@ class ActiveSupport::TestCase
   fixtures :all
 
   def encode_credentials(username, password)
-    "Basic #{ActiveSupport::Base64.encode64("#{username}:#{password}")}"
+    "Basic #{Base64.encode64("#{username}:#{password}")}"
   end
 
   def json_response

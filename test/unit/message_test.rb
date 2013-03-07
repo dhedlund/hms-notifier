@@ -2,29 +2,29 @@ require 'test_helper'
 
 class MessagesTest < ActiveSupport::TestCase
   test "valid message should be valid" do
-    assert Factory.build(:message).valid?
+    assert FactoryGirl.build(:message).valid?
   end
 
   test "should be invalid without a message stream id" do
-    assert Factory.build(:message, :message_stream_id => nil).invalid?
+    assert FactoryGirl.build(:message, :message_stream_id => nil).invalid?
   end
 
   test "should be invalid without a name" do
-    assert Factory.build(:message, :name => nil).invalid?
+    assert FactoryGirl.build(:message, :name => nil).invalid?
   end
 
   test "should be invalid without a title" do
-    assert Factory.build(:message, :title => nil).invalid?
+    assert FactoryGirl.build(:message, :title => nil).invalid?
   end
 
   test "should be valid without a language" do
-    assert Factory.build(:message, :language => nil).valid?
+    assert FactoryGirl.build(:message, :language => nil).valid?
   end
 
   test "should be sorted by offset_days in ascending order" do
-    s = Factory.create(:message_stream)
+    s = FactoryGirl.create(:message_stream)
     [10,6,29,8,3].each do |offset|
-      Factory.create(:message, :message_stream => s, :offset_days => offset)
+      FactoryGirl.create(:message, :message_stream => s, :offset_days => offset)
     end
     assert_equal s.messages.map(&:offset_days).sort, s.messages.map(&:offset_days)
   end
@@ -33,12 +33,12 @@ class MessagesTest < ActiveSupport::TestCase
   # expire_days:
   #-------------
   test "should be valid without an expire_days" do
-    message = Factory.build(:message, :expire_days => nil)
+    message = FactoryGirl.build(:message, :expire_days => nil)
     assert message.valid?
   end
 
   test "should be able to assign an integer to expire_days" do
-    message = Factory.build(:message, :expire_days => 5)
+    message = FactoryGirl.build(:message, :expire_days => 5)
     assert_equal 5, message.expire_days
   end
 
@@ -46,37 +46,37 @@ class MessagesTest < ActiveSupport::TestCase
   # offset_days:
   #-------------
   test "should be invalid without an offset" do
-    assert Factory.build(:message, :offset_days => nil).invalid?
+    assert FactoryGirl.build(:message, :offset_days => nil).invalid?
   end
 
   test "days offset must be a whole number" do
-    assert Factory.build(:message, :offset_days => 2.25).invalid?
+    assert FactoryGirl.build(:message, :offset_days => 2.25).invalid?
   end
 
   test "negative day offsets are invalid" do
-    assert Factory.build(:message, :offset_days => -5).invalid?
+    assert FactoryGirl.build(:message, :offset_days => -5).invalid?
   end
 
   test "zero day offsets are valid" do
-    assert Factory.build(:message, :offset_days => 0).valid?
+    assert FactoryGirl.build(:message, :offset_days => 0).valid?
   end
 
   #----------------------------------------------------------------------------#
   # path:
   #------
   test "can get a unique path to represent message across message streams" do
-    message = Factory.build(:message)
+    message = FactoryGirl.build(:message)
     assert_equal "#{message.message_stream.name}/#{message.name}",
       message.path
   end
 
   test "path should return nil if not enough info to build path" do
-    assert_nil Factory.build(:message, :message_stream => nil).path
-    assert_nil Factory.build(:message, :name => nil).path
+    assert_nil FactoryGirl.build(:message, :message_stream => nil).path
+    assert_nil FactoryGirl.build(:message, :name => nil).path
   end
 
   test "can search for a message by its path" do
-    message = Factory.create(:message)
+    message = FactoryGirl.create(:message)
     assert_equal message, Message.find_by_path(message.path)
   end
 
@@ -88,16 +88,16 @@ class MessagesTest < ActiveSupport::TestCase
   # relationship w/ MessageStream:
   #-------------------------------
   test "can access message stream from message" do
-    assert Factory.build(:message).message_stream
+    assert FactoryGirl.build(:message).message_stream
   end
 
   #----------------------------------------------------------------------------#
   # scopes:
   #--------
   test "notifiable: messages with offsets between -1 and 5 days from offset" do
-    stream = Factory.create(:message_stream)
+    stream = FactoryGirl.create(:message_stream)
     (3..12).each do |d|
-      Factory.create(:message, :message_stream => stream, :offset_days => d)
+      FactoryGirl.create(:message, :message_stream => stream, :offset_days => d)
     end
 
     assert_equal 3, stream.messages.notifiable(0).count, "count failed for 5"
@@ -115,7 +115,7 @@ class MessagesTest < ActiveSupport::TestCase
   # sms_text:
   #----------
   test "should be valid without an sms_text" do
-    message = Factory.build(:message)
+    message = FactoryGirl.build(:message)
     message.sms_text = nil
     assert message.valid?
   end

@@ -1,4 +1,6 @@
-Factory.define :notification do |f|
-  f.association :enrollment
-  f.association :message
+FactoryGirl.define do
+  factory :notification do
+    association :enrollment
+    association :message
+  end
 end
