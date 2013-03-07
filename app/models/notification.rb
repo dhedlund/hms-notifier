@@ -1,5 +1,3 @@
-require 'uuid'
-
 class Notification < ActiveRecord::Base
   belongs_to :enrollment
   belongs_to :message
@@ -60,7 +58,7 @@ class Notification < ActiveRecord::Base
   end
 
   def generate_uuid
-    write_attribute :uuid, UUID.generate
+    write_attribute :uuid, SecureRandom.uuid
   end
 
   def prevent_reactivation

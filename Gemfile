@@ -1,23 +1,24 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 3.0'
-
+gem 'rails', '3.2.12'
 gem 'mysql2'
-gem 'uuid'
 
-gem 'rest-client'
+gem 'rest-client' # hub integration
+gem 'gcal4ruby' # google calendar integration
+
+gem 'haml'
 gem 'simple_form'
 gem 'kaminari'
-gem 'haml'
 
-gem 'jquery-rails'
-
-gem 'gcal4ruby'
+group :assets do
+  gem 'sass-rails'
+  gem 'jquery-rails'
+end
 
 group :development, :test do
-  gem 'sqlite3'
-  gem 'factory_girl_rails'
-  gem 'jsonschema'
+  gem 'factory_girl_rails', :require => false
+  gem 'jsonschema', :require => false
   gem 'mocha', :require => false
   gem 'pry-rails'
+  gem 'sqlite3'
 end
